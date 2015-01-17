@@ -1,0 +1,73 @@
+.md-toolbar-tools {
+  padding: 0;
+}
+
+md-toolbar .md-button {
+  color: white;
+}
+
+md-toolbar .md-button:before {
+  font-size: 32px;
+}
+
+h2.md-subheader {
+  font-size: 18px;
+  margin: 0;
+  padding: 12px 16px 12px 16px;
+}
+
+h2.md-subheader.md-deep-orange-theme {
+  background-color: #ffccbc;
+}
+
+.md-subheader:not(.md-sticky-no-effect):after {
+  right: 0;
+}
+
+md-toolbar .md-shadow-bottom-z-1 {
+  z-index: 5;
+}
+
+md-input-container label {
+  font-size: 18px;
+}
+
+md-input-container.md-input-focused label,
+md-input-container.md-input-has-value label {
+  transform: translate3d(0px, 4px, 1px) scale(0.9);
+}
+
+md-input-container.md-default-theme .md-input {
+  border-color: rgba(0, 0, 0, 0.5);
+}
+
+md-input-container.md-default-theme .md-input {
+  border-color: rgba(0, 0, 0, 0.5);
+}
+
+md-input-container .md-input {
+  max-width: 356px;
+}
+
+md-input-container .md-input[type=number] {
+  width: 100%;
+}
+
+md-slider {
+  max-width: 300px;
+}
+
+.slider-container {
+  position: relative;
+}
+
+input[type=number].slider-control {
+  position: absolute;
+  top: 30px;
+  left: 324px;
+}
+
+md-whiteframe {
+  margin: 12px;
+  padding: 12px;
+}

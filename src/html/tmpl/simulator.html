@@ -1,0 +1,50 @@
+<md-content ng-controller="SimulatorCtrl as ctrl" layout="column">
+  <section class="limited-width">
+    <h2 class="md-subheader">Simulated Chromatogram</h2>
+    <p style="height:400px;border:4px solid black;">[insert graph here]</p>
+  </section>
+
+  <div>
+    <md-tabs md-selected="ctrl.selectedTab">
+      <md-tab id="tab-composition" aria-controls="content-composition">
+        Composition
+      </md-tab>
+      <md-tab id="tab-plot-options" aria-controls="content-plot-options">
+        2nd Plot
+      </md-tab>
+      <md-tab id="tab-chromatographic" aria-controls="content-chromatographic">
+        Chromatographic
+      </md-tab>
+      <md-tab id="tab-general" aria-controls="content-general">
+        General
+      </md-tab>
+      <md-tab id="tab-column" aria-controls="content-column">
+        Column
+      </md-tab>
+      <md-tab id="tab-compounds" aria-controls="content-compounds">
+        Compounds
+      </md-tab>
+    </md-tabs>
+
+    <ng-switch on="ctrl.selectedTab" class="tabpanel-container">
+      <section  class="limited-width" id="content-composition" ng-switch-when="0" md-swipe-left="nextTab()" md-swipe-right="previousTab()" role="tabpanel">
+        <ng-include src="'/html/mobile_phase_composition.html'"></ng-include>
+      </section>
+      <section class="limited-width" id="content-plot" ng-switch-when="1" md-swipe-left="nextTab()" md-swipe-right="previousTab()" role="tabpanel">
+        <ng-include src="'/html/plot_options.html'" ></ng-include>
+      </section>
+      <section class="limited-width" id="content-chromatographic" ng-switch-when="2" md-swipe-left="nextTab()" md-swipe-right="previousTab()" role="tabpanel">
+        <ng-include src="'/html/chromatographic_properties.html'"></ng-include>
+      </section>
+      <section class="limited-width" id="content-general" ng-switch-when="3" md-swipe-left="nextTab()" md-swipe-right="previousTab()" role="tabpanel">
+        <ng-include src="'/html/general_properties.html'"></ng-include>
+      </section>
+      <section class="limited-width" id="content-column" ng-switch-when="4" md-swipe-left="nextTab()" md-swipe-right="previousTab()" role="tabpanel">
+        <ng-include src="'/html/column_properties.html'"></ng-include>
+      </section>
+      <section class="limited-width" id="content-compounds" ng-switch-when="5" md-swipe-left="nextTab()" md-swipe-right="previousTab()" role="tabpanel">
+        <ng-include src="'/html/compounds.html'"></ng-include>
+      </section>
+    </ng-switch>
+  </div>
+</md-content>

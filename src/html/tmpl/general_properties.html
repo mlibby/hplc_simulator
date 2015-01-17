@@ -1,0 +1,56 @@
+<h2 class="md-subheader">General Properties</h2>
+
+<fieldset>
+  <md-input-container>
+    <label>Eluent viscosity (cP)</label>
+    <input type="number" ng-model="ctrl.simulator.eluentViscosity" />
+  </md-input-container>
+  <md-input-container>
+    <label>Average diffusion coefficient (cm&sup2/s)</label>
+    <input type="number" ng-model="ctrl.simulator.avgDiffusion" />
+  </md-input-container>
+  <md-input-container>
+    <label>Time Constant (seconds)</label>
+    <input type="number" step="0.1" ng-model="ctrl.simulator.timeConstant" />
+  </md-input-container>
+  <md-input-container>
+    <label>Signal offset (m units)</label>
+    <input type="number" ng-model="ctrl.simulator.signalOffset" />
+  </md-input-container>
+  <md-input-container>
+    <label>Noise</label>
+    <input type="number" step="0.1" ng-model="ctrl.simulator.noise" />
+  </md-input-container>
+  <fieldset>
+    <md-checkbox ng-model="ctrl.simulator.autoTimeSpan" aria-label="Automatically determine time span">
+      Automatically determine time span
+    </md-checkbox>
+    <md-input-container>
+      <label>Initial Time (seconds)</label>
+      <input type="number" ng-model="ctrl.simulator.initialTime" />
+    </md-input-container>
+    <md-input-container>
+      <label>Final Time (seconds)</label>
+      <input type="number" ng-model="ctrl.simulator.finalTime" />
+    </md-input-container>
+  </fieldset>
+  <md-input-container>
+    <label>Plot points</label>
+    <input type="number" ng-model="ctrl.simulator.plotPoints" />
+  </md-input-container>
+  <fieldset>
+    <caption>Post-column tubing</caption>
+    <md-input-container>
+      <label>Length (cm)</label>
+      <input type="number" step="0.1" ng-model="ctrl.simulator.postTubingLength" />
+    </md-input-container>
+    <md-input-container>
+      <label>Inner diameter (mm)</label>
+      <input type="number" step="0.1" ng-model="ctrl.simulator.postTubingDiameter" />
+    </md-input-container>
+    <md-input-container>
+      <label>Volume (&mu;L)</label>
+      <input type="number" step="0.01" ng-model="ctrl.simulator.postTubingVolume" />
+    </md-input-container>
+  </fieldset>
+</fieldset>

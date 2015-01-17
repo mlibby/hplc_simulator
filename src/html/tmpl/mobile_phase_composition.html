@@ -1,0 +1,32 @@
+<h2 class="md-subheader">Mobile Phase Composition</h2>
+<fieldset>
+  <label>
+    <span>Solvent A</span>
+    <md-radio-group ng-model="ctrl.simulator.primarySolvent">
+      <md-radio-button ng-repeat="(key, name) in ctrl.primarySolvents()" ng-value="name" aria-label="{{ name }}">
+        {{ name }}
+      </md-radio-button>
+    </md-radio-group>
+  </label>
+  <label>
+    <span>Solvent B</span>
+    <md-radio-group ng-model="ctrl.simulator.secondarySolvent">
+      <md-radio-button ng-repeat="(value, name) in ctrl.secondarySolvents()" ng-value="name" aria-label="{{ name }}">
+        {{ name }}
+      </md-radio-button>
+    </md-radio-group>
+  </label>
+  <label>
+    <span>Elution Mode</span>
+    <md-radio-group ng-model="ctrl.simulator.elutionMode">
+      <md-radio-button ng-repeat="(value, name) in ctrl.elutionModes()" ng-value="name" aria-label="{{ name }}">
+        {{ name }}
+      </md-radio-button>
+    </md-radio-group>
+  </label>
+  <label class="slider-container">
+    <span>Solvent B fraction (% v/v)</span>
+    <md-slider flex min="0" max="100" ng-model="ctrl.simulator.solventFraction" aria-label="Solvent B fraction" id="fraction-slider"></md-slider>
+    <input class="slider-control" type="number" ng-model="ctrl.simulator.solventFraction" aria-controls="fraction-slider"/>
+  </label>
+</fieldset>

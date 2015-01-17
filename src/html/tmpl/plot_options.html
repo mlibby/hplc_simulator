@@ -1,0 +1,22 @@
+<h2 class="md-subheader">2nd Plot Options</h2>
+<fieldset>
+  <md-radio-group ng-model="ctrl.simulator.secondPlot">
+    <md-radio-button ng-value="'No Plot'">No Plot</md-radio-button>
+    <md-radio-button ng-value="'Solvent B Fraction'" ng-disabled="true">Solvent B Fraction</md-radio-button>
+    <md-radio-button ng-value="'Backpressure'" ng-disabled="true">Backpressure</md-radio-button>
+    <md-radio-button ng-value="'Mobile phase viscosity'" ng-disabled="true">Mobile phase viscosity</md-radio-button>
+    <md-radio-button ng-value="'Retention Factor'"  ng-disabled="true">
+      Retention Factor of:
+      <select ng-disabled="true">
+        <option>Phenol</option>
+      </select>
+    </md-radio-button>
+    <md-radio-button ng-value="'Position Along Column'"  ng-disabled="true">
+      Position Along Column of:
+      <select ng-disabled="true">
+        <option>Phenol</option>
+      </select>
+    </md-radio-button>
+  </md-radio-group>
+</fieldset>
+

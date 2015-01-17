@@ -1,0 +1,19 @@
+<h2 class="md-subheader">Compounds</h2>
+<table>
+  <tr class="md-primary">
+    <th>Compound</th>
+    <th>Concentration (&mu;M)</th>
+    <th>k&prime;</th>
+    <th>tR (s)</th>
+    <th>0<sub>total</sub> (s)</th>
+    <th>W (pmol)</th>
+  </tr>
+  <tr ng-repeat='compound in ctrl.simulator.compounds'>
+    <td>{{ compound.name }}</td>
+    <td>{{ compound.concentration }}</td>
+    <td>{{ compound.kPrime }}</td>
+    <td>{{ compound.tR }}</td>
+    <td>{{ compound.omThing }}</td>
+    <td>{{ compound.w }}</td>
+  </tr>
+</table>

@@ -1,0 +1,61 @@
+<h2 class="md-subheader">Column Properties</h2>
+<fieldset>
+  <label>
+    <span>Stationary Phase</span>
+    <br />
+    <select>
+      <option>Agilent Zorbax SB-C18</option>
+    </select>
+  </label>
+  <md-input-container>
+    <label>Length (mm)</label>
+    <input type="number" step="0.1" ng-model="ctrl.simulator.column.length" />
+  </md-input-container>
+  <md-input-container>
+    <label>Inner Diameter (mm)</label>
+    <input type="number" step="0.1" ng-model="ctrl.simulator.column.diameter" />
+  </md-input-container>
+  <md-input-container>
+    <label>Particle Size (&mu;m)</label>
+    <input type="number" step="0.1" ng-model="ctrl.simulator.column.particleSize" />
+  </md-input-container>
+  <md-input-container>
+    <label>Interparticle Porosity</label>
+    <input type="number" step="0.1" ng-model="ctrl.simulator.column.interparticlePorosity" />
+  </md-input-container>
+  <md-input-container>
+    <label>Intrapartical Porosity</label>
+    <input type="number" step="0.1" ng-model="ctrl.simulator.column.intraparticlePorosity" />
+  </md-input-container>
+  <md-input-container>
+    <label>Total Porosity</label>
+    <input type="number" step="0.0001" ng-model="ctrl.simulator.column.totalPorosity" />
+  </md-input-container>
+  <md-input-container>
+    <label>Void volume (mL)</label>
+    <input type="number" step="0.0001" ng-model="ctrl.simulator.column.voidVolume" />
+  </md-input-container>
+  <md-input-container>
+    <label>Void time (seconds)</label>
+    <input type="number" step="0.0001" ng-model="ctrl.simulator.column.voidTime" />
+  </md-input-container>
+  <fieldset>
+    <legend>Reduced Van Deemter&hellip;</legend>
+    <md-input-container>
+      <label>A</label>
+      <input type="number" step="0.1" ng-model="ctrl.simulator.column.vanDeemterA" />
+    </md-input-container>
+    <md-input-container>
+      <label>B</label>
+      <input type="number" step="0.1" ng-model="ctrl.simulator.column.vanDeemterB" />
+    </md-input-container>
+    <md-input-container>
+      <label>C</label>
+      <input type="number" step="0.01" ng-model="ctrl.simulator.column.vanDeemterC" />
+    </md-input-container>
+  </fieldset>
+  <md-input-container>
+    <label>Reduced plate height (units?)</label>
+    <input type="number" step="0.1" ng-model="ctrl.simulator.column.plateHeight" />
+  </md-input-container>
+</fieldset>

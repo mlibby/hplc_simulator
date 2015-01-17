@@ -1,0 +1,47 @@
+<h2 class="md-subheader">Chromatographic Properties</h2>
+<fieldset>
+  <label class="slider-container">
+    <span>Temperature (&deg;C)</span>
+    <md-slider flex min="10" max="150" ng-model="ctrl.simulator.degrees" aria-label="Temperature (degrees celsius)" id="degrees-slider"></md-slider>
+    <input class="slider-control" type="number" ng-model="ctrl.simulator.degrees" aria-controls="degrees-slider" />
+  </label>
+  <md-input-container>
+    <label>Injection Volume (&mu;L)</label>
+    <input type="number" step="0.1" ng-model="ctrl.simulator.injectionVolume" />
+  </md-input-container>
+  <md-input-container>
+    <label>Flow Rate (mL/min)</label>
+    <input type="number" step="0.1" ng-model="ctrl.simulator.flowRate" />
+  </md-input-container>
+  <fieldset>
+    <legend>Flow Velocity</legend>
+    <md-input-container>
+      <label>Open tube (cm/second)</label>
+      <input type="number" readonly step="0.0001" ng-model="ctrl.simulator.openTubeFlowVelocity" />
+    </md-input-container>
+    <md-input-container>
+      <label>Interstitial (cm/second)</label>
+      <input type="number" readonly step="0.0001" ng-model="ctrl.simulator.interstitialFlowVelocity" />
+    </md-input-container>
+    <md-input-container>
+      <label>Chromatographic (cm/second)</label>
+      <input type="number" readonly step="0.0001" ng-model="ctrl.simulator.chromatographicFlowVelocity" />
+    </md-input-container>
+    <md-input-container>
+      <label>Reduced</label>
+      <input type="number" readonly step="0.0001" ng-model="ctrl.simulator.reducedFlowVelocity" />
+    </md-input-container>
+  </fieldset>
+  <md-input-container>
+    <label>HETP (cm)</label>
+    <input type="number" readonly step="0.0001" ng-model="ctrl.simulator.hetp" />
+  </md-input-container>
+  <md-input-container>
+    <label>Theoretical Plates</label>
+    <input type="number" readonly ng-model="ctrl.simulator.theoreticalPlates" />
+  </md-input-container>
+  <md-input-container>
+    <label>Backpressure (bar)</label>
+    <input type="number" readonly step="0.1" ng-model="ctrl.simulator.backpressure" />
+  </md-input-container>
+</fieldset>

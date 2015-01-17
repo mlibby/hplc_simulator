@@ -1,0 +1,37 @@
+{
+  "name": "HplcSimulator",
+  "version": "0.0.1",
+  "description": "High Pressure Liquid Chromatography Simulator",
+  "dependencies": {
+    "bower": "^1.3.12",
+    "ejs": "~1.0.0",
+    "express": "~4.9.5",
+    "grunt": "^0.4.5",
+    "grunt-cli": "^0.1.13",
+    "grunt-contrib-clean": "^0.6.0",
+    "grunt-contrib-concat": "^0.5.0",
+    "grunt-contrib-copy": "^0.7.0",
+    "grunt-contrib-cssmin": "^0.10.0",
+    "grunt-contrib-uglify": "^0.6.0",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-filerev": "^2.1.2",
+    "grunt-usemin": "^2.6.2"
+  },
+  "scripts": {
+    "postinstall": "sh ./install.sh"
+  },
+  "private": true,
+  "engines": {
+    "node": "0.10.x",
+    "npm": "1.4.x"
+  },
+  "devDependencies": {
+    "grunt-express-server": "^0.4.19",
+    "grunt-karma": "^0.9.0",
+    "karma": "^0.12.24",
+    "karma-firefox-launcher": "^0.1.3",
+    "karma-htmlfile-reporter": "^0.1.2",
+    "karma-jasmine": "^0.1.5",
+    "karma-ng-html2js-preprocessor": "^0.1.0"
+  }
+}
