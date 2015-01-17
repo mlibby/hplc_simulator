@@ -23,7 +23,7 @@
   "private": true,
   "engines": {
     "node": "0.10.x",
-    "npm": "1.4.x"
+    "npm": "2.2.x"
   },
   "devDependencies": {
     "grunt-express-server": "^0.4.19",
