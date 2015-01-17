@@ -207,7 +207,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('build', [
     'clean',
-    'copy-dev',
+    'copy-build',
     'useminPrepare',
     'concat:generated',
     'cssmin:generated',
