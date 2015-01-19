@@ -1,8 +1,7 @@
-var HPLC = window.HPLC || {};
-window.HPLC = HPLC;
+var HPLC = require("./hplc_globals.js");
 
-HPLC.Compound = function (compoundName, solventName) {
-  var compound =  HPLC.CompoundProperties[compoundName];
+var Compound = function (compoundName, solventName) {
+  var compound =  CompoundProperties[compoundName];
   var properties = compound[solventName];
   this.name = compoundName;
   this.logKwTslope = properties.logKwTslope;
@@ -11,6 +10,8 @@ HPLC.Compound = function (compoundName, solventName) {
   this.sTintercept = properties.sTintercept;
   this.molarVolume = compound.molarVolume;
 };
+
+exports.Compound = Compound;
 
 /* New Compound Entry Template */
 // 'compound': {
@@ -30,7 +31,7 @@ HPLC.Compound = function (compoundName, solventName) {
 
 /* TODO: load from database or file */
 
-HPLC.CompoundProperties = {
+CompoundProperties = {
   phenol: {
     molarVolume: 103.4,
     'Acetonitrile': {

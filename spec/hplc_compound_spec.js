@@ -1,7 +1,8 @@
 describe('HPLC.Compound', function () {
+
   it('can get phenol in acetonitrile', function() {
     var phenol = new HPLC.Compound('phenol', HPLC.secondarySolvents.acetonitrile.name);
-    expect(phenol).toNotBe(null);
+    expect(phenol).not.toBe(null);
     expect(phenol.name).toBe("phenol");
     expect(phenol.logKwTslope).toBe(-0.007051397);
     expect(phenol.logKwTintercept).toBe(1.222652803);
@@ -11,7 +12,7 @@ describe('HPLC.Compound', function () {
 
   it('can get phenol in methanol', function() {
     var phenol = new HPLC.Compound('phenol', HPLC.secondarySolvents.methanol.name);
-    expect(phenol).toNotBe(null);
+    expect(phenol).not.toBe(null);
     expect(phenol.name).toBe("phenol");
     expect(phenol.logKwTslope).toBe(-0.010465);
     expect(phenol.logKwTintercept).toBe(1.714002);

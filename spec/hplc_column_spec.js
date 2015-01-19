@@ -6,7 +6,7 @@ describe('HPLC.Column', function() {
   });
   
   it('preset column Agilent Zorbax SB-C18 exists', function() {
-    expect(column).toNotBe(undefined);
+    expect(column).not.toBe(undefined);
     expect(column.length).toBe(100.0);
     expect(column.diameter).toBe(4.6);
     expect(column.particleSize).toBe(3.0);

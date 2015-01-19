@@ -1,27 +1,27 @@
-var HPLC = HPLC || {};
+exports.Column = Column;
 
-HPLC.Column = function (presetName) {
-  HPLC.ColumnPreset[presetName](this);
+function Column(presetName) {
+  columnPreset[presetName](this);
   this.update();
 };
 
-HPLC.Column.prototype.update = function () {
+Column.prototype.update = function () {
   this.updateArea();
   this.updateTotalPorosity();
 };
 
-HPLC.Column.prototype.updateArea = function () {
+Column.prototype.updateArea = function () {
   this.radius = (this.diameter / 10) / 2;
   this.area = Math.PI * Math.pow(this.radius, 2);
 };
 
-HPLC.Column.prototype.updateTotalPorosity = function () {
+Column.prototype.updateTotalPorosity = function () {
   this.totalPorosity = this.interparticlePorosity + this.intraparticlePorosity * (1 - this.interparticlePorosity);
 };
 
-HPLC.ColumnPreset = HPLC.ColumnPreset || {};
+var columnPreset = {};
 
-HPLC.ColumnPreset['Agilent Zorbax SB-C18'] = function(column) {
+columnPreset['Agilent Zorbax SB-C18'] = function(column) {
   column.name = 'Agilent Zorbax SB-C18';
   column.length = 100.0;
   column.diameter = 4.6;
