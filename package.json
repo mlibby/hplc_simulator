@@ -26,6 +26,7 @@
     "npm": "2.2.x"
   },
   "devDependencies": {
+    "grunt-browserify": "^3.3.0",
     "grunt-express-server": "^0.4.19",
     "grunt-karma": "^0.9.0",
     "karma": "^0.12.24",

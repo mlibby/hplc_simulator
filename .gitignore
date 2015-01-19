@@ -36,6 +36,6 @@ bower_components/
 dist/*
 src/css/libs/
 src/js/libs/
-
+src/js/browserified.js
 \#*
 .#*

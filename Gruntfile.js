@@ -2,6 +2,13 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
 
+    browserify: {
+      hplc: {
+        src: ['src/js/manifest.js'],
+        dest: 'src/js/browserified.js'
+      },
+    },
+    
     clean: {
       js: ["dist/js/*.js"],
       css: ["dist/css/*"],
@@ -42,7 +49,7 @@ module.exports = function(grunt) {
       devJs: {
         expand: true,
         cwd: 'src/js',
-        src: ['**/*.js', 'model/*.js'],
+        src: ['browserified.js'],
         dest: 'dist/js/'
       },
       devIconCss: {
@@ -181,12 +188,13 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-express-server');
   grunt.loadNpmTasks('grunt-filerev');
+  grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-usemin');
 
   grunt.registerTask('copy-build', [
     'copy:devCss',
-    'copy:devJs',
+//    'copy:devJs',
     'copy:devHtml',
     'copy:devIconCss',
     'copy:devIconFont'
@@ -207,6 +215,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('build', [
     'clean',
+    'browserify',
     'copy-dev',
     'useminPrepare',
     'concat:generated',
