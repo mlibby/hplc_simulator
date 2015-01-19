@@ -66,13 +66,6 @@ describe('HPLC.Simulator', function() {
     expect(simulator.eluentViscosity).toEqual(eluentViscosity);
   });
 
-  // double dAverageMolarVolume = 0;
-  // for (int i = 0; i < m_vectCompound.size(); i++)
-  // {
-  //   dAverageMolarVolume += m_vectCompound.get(i).dMolarVolume;
-  // }
-  // dAverageMolarVolume = dAverageMolarVolume / m_vectCompound.size();
-
   it('calculates average molar volume', function () {
     var averageMolarVolume = 0;
     for (var i in simulator.compounds) {

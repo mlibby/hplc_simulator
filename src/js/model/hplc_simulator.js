@@ -45,11 +45,30 @@ Simulator.prototype.update = function () {
   this.updateSolventMolecularWeight();
   this.updateTempKelvin();
   this.updateEluentViscosity();
+  this.updateAverageMolarVolume();
+  this.updateDiffusionCoefficient();
+  this.updateReducedFlowVelocity();
 };
 
-// HPLC.Simulator.prototype.update = function () {
+// Simulator.prototype.update = function () {
 //   this. = ;
 // };
+
+Simulator.prototype.updateReducedFlowVelocity = function () {
+  this.reducedFlowVelocity = ((this.column.particleSize / 10000) * this.interstitialFlowVelocity) / this.diffusionCoefficient;
+};
+
+Simulator.prototype.updateDiffusionCoefficient = function () {
+  this.diffusionCoefficient = 0.000000074 * (Math.pow(this.associationParameter * this.solventMW, 0.5) * this.tempKelvin) / (this.eluentViscosity * Math.pow(this.averageMolarVolume, 0.6));
+};
+
+Simulator.prototype.updateAverageMolarVolume = function () {
+  this.averageMolarVolume = 0;
+  for (var i in this.compounds) {
+    this.averageMolarVolume += this.compounds[i].molarVolume;
+  }
+  this.averageMolarVolume /= this.compounds.length;
+};
 
 Simulator.prototype.updateEluentViscosity = function () {
   this.eluentViscosity = this.secondarySolvent.eluentViscosity(

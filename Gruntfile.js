@@ -132,10 +132,10 @@ module.exports = function(grunt) {
         tasks: ['copy:bowerCss']
       },
 
-      js: {
-        files: 'src/js/**/*.js',
-        tasks: ['copy:devJs']
-      },
+      // js: {
+      //   files: 'src/js/**/*.js',
+      //   tasks: ['copy:devJs']
+      // },
 
       css: {
         files: 'src/css/**/*.css',
