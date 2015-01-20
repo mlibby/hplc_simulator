@@ -33,8 +33,16 @@
     </md-input-container>
   </fieldset>
   <md-input-container>
+    <label>Void time (seconds)</label>
+    <input type="number" step="0.0001" ng-model="ctrl.simulator.voidTime" />
+  </md-input-container>
+  <md-input-container>
     <label>HETP (cm)</label>
     <input type="number" readonly step="0.0001" ng-model="ctrl.simulator.hetp" />
+  </md-input-container>
+  <md-input-container>
+    <label>Reduced plate height (units?)</label>
+    <input type="number" step="0.1" ng-model="ctrl.simulator.plateHeight" />
   </md-input-container>
   <md-input-container>
     <label>Theoretical Plates</label>

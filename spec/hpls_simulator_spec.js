@@ -94,6 +94,10 @@ describe('HPLC.Simulator', function() {
     expect(simulator.reducedFlowVelocity).toEqual(reducedFlowVelocity);
   });
 
+  it('calculates the void time in seconds', function () {
+    expect(column.voidTime).toBe(31.9085);
+  });
+
   it('has general defaults', function() {
     expect(simulator.timeConstant).toBe(0.1);
     expect(simulator.signalOffset).toBe(0);
