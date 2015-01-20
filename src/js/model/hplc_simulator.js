@@ -59,7 +59,7 @@ Simulator.prototype.updateReducedFlowVelocity = function () {
 };
 
 Simulator.prototype.updateDiffusionCoefficient = function () {
-  this.diffusionCoefficient = 0.000000074 * (Math.pow(this.associationParameter * this.solventMW, 0.5) * this.tempKelvin) / (this.eluentViscosity * Math.pow(this.averageMolarVolume, 0.6));
+  this.diffusionCoefficient = 0.000000074 * (Math.pow(this.associationParameter * this.solventMolecularWeight, 0.5) * this.tempKelvin) / (this.eluentViscosity * Math.pow(this.averageMolarVolume, 0.6));
 };
 
 Simulator.prototype.updateAverageMolarVolume = function () {
@@ -88,7 +88,7 @@ Simulator.prototype.updateSolventMolecularWeight = function () {
 };
 
 Simulator.prototype.updateAssociationParameter = function () {
-  this.associationParameter = ((1 - this.solventFraction) * (2.6 - 1.9)) + 1.9;
+  this.associationParameter = ((1 - (this.solventFraction/100)) * (2.6 - 1.9)) + 1.9;
 };
 
 Simulator.prototype.updateInterstitialFlowVelocity = function () {

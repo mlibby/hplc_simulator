@@ -21,21 +21,29 @@ describe('HPLC.Simulator', function() {
   
   it('calculates open tube flow velocity', function() {
     var openTubeFlowVelocity = simulator.flowRate / simulator.column.area;
+    expect(simulator.openTubeFlowVelocity).not.toBe(NaN);
+    expect(simulator.openTubeFlowVelocity).toBeGreaterThan(0);
     expect(simulator.openTubeFlowVelocity).toEqual(openTubeFlowVelocity);
   });
 
   it('calculates chromatographic flow velocity', function () {
     var chromatographicFlowVelocity = simulator.openTubeFlowVelocity / simulator.column.totalPorosity;
+    expect(simulator.chromatographicFlowVelocity).not.toBe(NaN);
+    expect(simulator.chromatographicFlowVelocity).toBeGreaterThan(0);
     expect(simulator.chromatographicFlowVelocity).toEqual(chromatographicFlowVelocity);
   })
 
   it('calculates interstitial flow velocity', function () {
     var interstitialFlowVelocity = simulator.openTubeFlowVelocity / simulator.column.interparticlePorosity;
+    expect(simulator.interstitialFlowVelocity).not.toBe(NaN);
+    expect(simulator.interstitialFlowVelocity).toBeGreaterThan(0);
     expect(simulator.interstitialFlowVelocity).toEqual(interstitialFlowVelocity);
   });
 
   it('calculates association parameter', function () {
-    var associationParameter = ((1 - simulator.solventFraction) * (2.6 - 1.9)) + 1.9;
+    var associationParameter = ((1 - (simulator.solventFraction/100)) * (2.6 - 1.9)) + 1.9;
+    expect(simulator.associationParameter).not.toBe(NaN);
+    expect(simulator.associationParameter).toBeGreaterThan(0);
     expect(simulator.associationParameter).toEqual(associationParameter);
   });
 
@@ -76,7 +84,7 @@ describe('HPLC.Simulator', function() {
   });
 
   it('calculates diffusion coefficient', function () {
-    var diffusionCoefficient = 0.000000074 * (Math.pow(simulator.associationParameter * simulator.solventMW, 0.5) * simulator.tempKelvin) / (simulator.eluentViscosity * Math.pow(simulator.averageMolarVolume, 0.6));
+    var diffusionCoefficient = 0.000000074 * (Math.pow(simulator.associationParameter * simulator.solventMolecularWeight, 0.5) * simulator.tempKelvin) / (simulator.eluentViscosity * Math.pow(simulator.averageMolarVolume, 0.6));
 ;
     expect(simulator.diffusionCoefficient).toEqual(diffusionCoefficient);
   });
