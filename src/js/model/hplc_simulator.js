@@ -84,7 +84,7 @@ Simulator.prototype.updateTempKelvin = function () {
 
 Simulator.prototype.updateSolventMolecularWeight = function () {
   this.solventBaseMolecularWeight = this.secondarySolvent.molecularWeight;
-  this.solventMolecularWeight = (this.solventFraction * (this.solventBaseMolecularWeight - 18)) + 18;;
+  this.solventMolecularWeight = ((this.solventFraction/100) * (this.solventBaseMolecularWeight - 18)) + 18;;
 };
 
 Simulator.prototype.updateAssociationParameter = function () {

@@ -55,7 +55,7 @@ describe('HPLC.Simulator', function() {
   });
 
   it('calculates secondary solvent weighted average molecular weight', function () {
-    var solventMolecularWeight = (simulator.solventFraction * (simulator.solventBaseMolecularWeight - 18)) + 18;
+    var solventMolecularWeight = ((simulator.solventFraction/100) * (simulator.solventBaseMolecularWeight - 18)) + 18;
     expect(simulator.solventMolecularWeight).toEqual(solventMolecularWeight);
   });
 

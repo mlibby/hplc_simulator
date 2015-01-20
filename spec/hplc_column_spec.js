@@ -18,7 +18,7 @@ describe('HPLC.Column', function() {
   });
 
   it('calculates certain properties at initialization', function() {
-    var radius = column.diameter / 20;
+    var radius = column.diameter / 200;
     expect(column.radius).toEqual(radius);
 
     var area = Math.PI * Math.pow(radius, 2);
