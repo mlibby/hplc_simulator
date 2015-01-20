@@ -19,13 +19,13 @@ exports.Compound = Compound;
 //      logKwTslope: ,
 //      logKwTintercept: ,
 //      sTslope: ,
-//      sTintercept: 
+//      sTintercept:
 //   },
 //   'Methanol': {
 //      logKwTslope: ,
 //      logKwTintercept: ,
 //      sTslope: ,
-//      sTintercept: 
+//      sTintercept:
 //   }
 // },
 
@@ -60,6 +60,51 @@ CompoundProperties = {
       logKwTintercept: 2.682599,
       sTslope: 0.010667,
       sTintercept: -3.544294
+    }
+  },
+  'acetophenone': {
+    molarVolume: 140.4,
+    'Acetonitrile': {
+      logKwTslope: 0,
+      logKwTintercept: 0,
+      sTslope: 0,
+      sTintercept:0
+    },
+    'Methanol': {
+      logKwTslope: 0,
+      logKwTintercept: 0,
+      sTslope: 0,
+      sTintercept:0
+    }
+  },
+  'p-chlorophenol': {
+    molarVolume: 124.3,
+    'Acetonitrile': {
+      logKwTslope: 0,
+      logKwTintercept:0 ,
+      sTslope: 0,
+      sTintercept:0
+    },
+    'Methanol': {
+      logKwTslope: 0,
+      logKwTintercept:0 ,
+      sTslope: 0,
+      sTintercept:0
+    }
+  },
+  'p-nitrotoluene': {
+    molarVolume: 144.9,
+    'Acetonitrile': {
+      logKwTslope: 0,
+      logKwTintercept:0 ,
+      sTslope: 0,
+      sTintercept:0
+    },
+    'Methanol': {
+      logKwTslope: 0,
+      logKwTintercept: 0,
+      sTslope: 0,
+      sTintercept:0
     }
   },
 };

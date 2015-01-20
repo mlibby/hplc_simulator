@@ -10,15 +10,25 @@ exports.globals = {
     acetonitrile: {
       name: 'Acetonitrile',
       molecularWeight: 41,
-      eluentViscosity: function (solventFraction, tempKelvin) {
-        return Math.exp((solventFraction * (-3.476 + (726 / tempKelvin))) + ((1 - solventFraction) * (-5.414 + (1566 / tempKelvin))) + (solventFraction * (1 - solventFraction) * (-1.762 + (929 / tempKelvin))));
-      },
+      eluentViscosityParameters: {
+        a: -3.476,
+        b: 726,
+        c: -5.414,
+        d: 1566,
+        e: -1.762,
+        f: 929
+      }
     },
     methanol: {
       name: 'Methanol',
       molecularWeight: 32,
-      eluentViscosity: function (solventFraction, tempKelvin) {
-        return Math.exp((solventFraction * (-4.597 + (1211 / tempKelvin))) + ((1 - solventFraction) * (-5.961 + (1736 / tempKelvin))) + (solventFraction * (1 - solventFraction) * (-6.215 + (2809 / tempKelvin))));
+      eluentViscosityParameters: {
+        a: -4.597,
+        b: 1211,
+        c: -5.961,
+        d: 1736,
+        e: -6.215,
+        f: 2809
       },
     }
   },

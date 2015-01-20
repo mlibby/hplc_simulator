@@ -78,6 +78,7 @@ function Column(presetName) {
 };
 
 Column.prototype.update = function () {
+  this.area = area(this);
   this.volume = volume(this);
   this.totalPorosity = totalPorosity(this);
   this.voidVolume = voidVolume(this);
@@ -104,7 +105,7 @@ var voidVolume = function (column) {
 
 /* units: mm^3 */
 var volume = function (column) {
-  return area(column) * column.length;
+  return column.area * column.length;
 };
 
 

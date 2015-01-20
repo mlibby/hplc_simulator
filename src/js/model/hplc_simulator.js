@@ -125,81 +125,88 @@ function Simulator() {
 
   var compounds = [
     new Compound('phenol', this.secondarySolvent.name),
+    new Compound('3-phenyl propanol', this.secondarySolvent.name),
+    new Compound('acetophenone', this.secondarySolvent.name),
+    new Compound('p-chlorophenol', this.secondarySolvent.name),
+    new Compound('p-nitrotoluene', this.secondarySolvent.name)
   ];
+
   Object.defineProperty(this, 'compounds', {
     get: function() { return compounds; }
   });
+
+  this.update();
 };
 
 Simulator.prototype.update = function () {
-  this.column.update();
-  this.updateOpenTubeFlowVelocity();
-  this.updateChromatographicFlowVelocity();
-  this.updateInterstitialFlowVelocity();
-  this.updateAssociationParameter();
-  this.updateSolventMolecularWeight();
-  this.updateTempKelvin();
-  this.updateEluentViscosity();
-  this.updateAverageMolarVolume();
-  this.updateDiffusionCoefficient();
-  this.updateReducedFlowVelocity();
+  this.voidTime = voidTime(this);
+  this.openTubeFlowVelocity = openTubeFlowVelocity(this);
+  this.chromatographicFlowVelocity = chromatographicFlowVelocity(this);
+  this.interstitialFlowVelocity = interstitialFlowVelocity(this);
+  this.eluentViscosity = eluentViscosity(this);
+  this.diffusionCoefficient = diffusionCoefficient(this);
+  this.reducedFlowVelocity = reducedFlowVelocity(this);
 };
 
 // Simulator.prototype.update = function () {
 //   this. = ;
 // };
 
+var associationParameter = function (simulator) {
+  return ((1 - simulator.solventFraction) * (2.6 - 1.9)) + 1.9;
+};
+
+var averageMolarVolume = function (simulator) {
+  var averageMolarVolume = 0;
+  for (var i in simulator.compounds) {
+    averageMolarVolume += simulator.compounds[i].molarVolume;
+  }
+  return averageMolarVolume /= simulator.compounds.length;
+};
+
+var chromatographicFlowVelocity = function (simulator) {
+  return simulator.openTubeFlowVelocity / simulator.column.totalPorosity;
+};
+
+var diffusionCoefficient = function (simulator) {
+  var assocParam = associationParameter(simulator);
+  var smw = solventMolecularWeight(simulator);
+  var k = kelvin(simulator.temperature);
+  var avgMolarVol = averageMolarVolume(simulator);
+  var numerator = 0.000000074 * (Math.pow(assocParam * smw, 0.5) * k);
+  var denominator = simulator.eluentViscosity * Math.pow(avgMolarVol, 0.6);
+  return numerator / denominator;
+};
+
+var eluentViscosity = function (simulator) {
+  var fraction = simulator.solventFraction;
+  var param = simulator.secondarySolvent.eluentViscosityParameters;
+  var k = kelvin(simulator.temperature);
+  return Math.exp((fraction * (param.a + (param.b / k))) + ((1 - fraction) * (param.c + (param.d / k))) + (fraction * (1 - fraction) * (param.e + (param.f / k))));
+};
+
+var interstitialFlowVelocity = function (simulator) {
+  return simulator.openTubeFlowVelocity / simulator.column.interparticlePorosity;
+};
+
+var kelvin = function (temperature) {
+  return temperature + 273.15;
+};
+
+/* units: cm/sec */
+var openTubeFlowVelocity = function (simulator) {
+  return (simulator.flowRate / 60) / simulator.column.area * 100;
+};
+
+var reducedFlowVelocity = function (simulator) {
+  return ((simulator.column.particleSize / 10000) * simulator.interstitialFlowVelocity) / diffusionCoefficient(simulator);
+};
+
+var solventMolecularWeight = function (simulator) {
+  return (simulator.solventFraction * (simulator.secondarySolvent.molecularWeight - 18)) + 18;
+};
 
 /* units: seconds */
-var voidTime = function (column) {
-  return column.voidVolume / column.flowRate * 60;
-};
-
-Simulator.prototype.updateReducedFlowVelocity = function () {
-  this.reducedFlowVelocity = ((this.column.particleSize / 10000) * this.interstitialFlowVelocity) / this.diffusionCoefficient;
-};
-
-Simulator.prototype.updateDiffusionCoefficient = function () {
-  this.diffusionCoefficient = 0.000000074 * (Math.pow(this.associationParameter * this.solventMolecularWeight, 0.5) * this.tempKelvin) / (this.eluentViscosity * Math.pow(this.averageMolarVolume, 0.6));
-};
-
-Simulator.prototype.updateAverageMolarVolume = function () {
-  this.averageMolarVolume = 0;
-  for (var i in this.compounds) {
-    this.averageMolarVolume += this.compounds[i].molarVolume;
-  }
-  this.averageMolarVolume /= this.compounds.length;
-};
-
-Simulator.prototype.updateEluentViscosity = function () {
-  this.eluentViscosity = this.secondarySolvent.eluentViscosity(
-    this.solventFraction / 100,
-    this.tempKelvin
-  );
-};
-
-Simulator.prototype.updateTempKelvin = function () {
-  this.tempKelvin = (this.temperature / 100) + 273.15;
-};
-
-
-Simulator.prototype.updateSolventMolecularWeight = function () {
-  this.solventBaseMolecularWeight = this.secondarySolvent.molecularWeight;
-  this.solventMolecularWeight = ((this.solventFraction/100) * (this.solventBaseMolecularWeight - 18)) + 18;;
-};
-
-Simulator.prototype.updateAssociationParameter = function () {
-  this.associationParameter = ((1 - (this.solventFraction/100)) * (2.6 - 1.9)) + 1.9;
-};
-
-Simulator.prototype.updateInterstitialFlowVelocity = function () {
-  this.interstitialFlowVelocity = this.openTubeFlowVelocity / this.column.interparticlePorosity;
-};
-
-Simulator.prototype.updateChromatographicFlowVelocity = function () {
-  this.chromatographicFlowVelocity = this.openTubeFlowVelocity / this.column.totalPorosity;
-};
-
-Simulator.prototype.updateOpenTubeFlowVelocity = function () {
-  this.openTubeFlowVelocity = this.flowRate / this.column.area;
+var voidTime = function (simulator) {
+  return simulator.column.voidVolume / simulator.flowRate * 60;
 };

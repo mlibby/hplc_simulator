@@ -20,6 +20,8 @@ describe('HPLC.Column', function () {
   it('calculates the volume in cubic mm', function () {
     var radius_mm = column.diameter / 2;
     var area_mm2 = Math.PI * Math.pow(radius_mm, 2);
+    expect(column.area).toBe(area_mm2);
+    
     var volume_mm3 = column.length * area_mm2;
     expect(column.volume).toBe(volume_mm3); 
   });
