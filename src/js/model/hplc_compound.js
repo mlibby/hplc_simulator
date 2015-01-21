@@ -1,14 +1,18 @@
 var HPLC = require("./hplc_globals.js");
 
-var Compound = function (compoundName, solventName) {
-  var compound =  CompoundProperties[compoundName];
-  var properties = compound[solventName];
+var Compound = function (compoundName, solventName, concentration) {
   this.name = compoundName;
+  this.concentration = concentration;
+
+  var compound =  CompoundProperties[compoundName];
+  this.molarVolume = compound.molarVolume;
+  
+  
+  var properties = compound[solventName];
   this.logKwTslope = properties.logKwTslope;
   this.logKwTintercept = properties.logKwTintercept;
   this.sTslope = properties.sTslope;
   this.sTintercept = properties.sTintercept;
-  this.molarVolume = compound.molarVolume;
 };
 
 exports.Compound = Compound;

@@ -62,7 +62,7 @@ describe('HPLC.Simulator', function() {
   });
 
   it('calculates backpressure in bar', function () {
-    expect(simulator.backpressure).toBe(173.49);
+    expect(simulator.backpressureBar).toBeAround(173.492806658);
   });
 
   /* General Properties */
@@ -107,11 +107,11 @@ describe('HPLC.Simulator', function() {
 
   it('has default compounds', function() {
     var compounds = [
-      new HPLC.Compound('phenol', HPLC.secondarySolvents.acetonitrile.name),
-      new HPLC.Compound('3-phenyl propanol', HPLC.secondarySolvents.acetonitrile.name),
-      new HPLC.Compound('acetophenone', HPLC.secondarySolvents.acetonitrile.name),
-      new HPLC.Compound('p-chlorophenol', HPLC.secondarySolvents.acetonitrile.name),
-      new HPLC.Compound('p-nitrotoluene', HPLC.secondarySolvents.acetonitrile.name)
+      new HPLC.Compound('phenol', HPLC.secondarySolvents.acetonitrile.name, 5),
+      new HPLC.Compound('3-phenyl propanol', HPLC.secondarySolvents.acetonitrile.name, 25),
+      new HPLC.Compound('acetophenone', HPLC.secondarySolvents.acetonitrile.name, 40),
+      new HPLC.Compound('p-chlorophenol', HPLC.secondarySolvents.acetonitrile.name, 15),
+      new HPLC.Compound('p-nitrotoluene', HPLC.secondarySolvents.acetonitrile.name, 10)
     ];
     expect(simulator.compounds).toEqual(compounds);
   });

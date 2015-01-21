@@ -124,21 +124,26 @@ function Simulator() {
   });
 
   var compounds = [
-    new Compound('phenol', this.secondarySolvent.name),
-    new Compound('3-phenyl propanol', this.secondarySolvent.name),
-    new Compound('acetophenone', this.secondarySolvent.name),
-    new Compound('p-chlorophenol', this.secondarySolvent.name),
-    new Compound('p-nitrotoluene', this.secondarySolvent.name)
+    new Compound('phenol', this.secondarySolvent.name, 5),
+    new Compound('3-phenyl propanol', this.secondarySolvent.name, 25),
+    new Compound('acetophenone', this.secondarySolvent.name, 40),
+    new Compound('p-chlorophenol', this.secondarySolvent.name, 15),
+    new Compound('p-nitrotoluene', this.secondarySolvent.name, 10)
   ];
 
   Object.defineProperty(this, 'compounds', {
     get: function() { return compounds; }
   });
 
+  Object.defineProperty(this, 'backpressureBar', {
+    get: function() { return this.backpressure / 100000; }
+  });
+
   this.update();
 };
 
 Simulator.prototype.update = function () {
+  this.postTubingVolume = postTubingVolume(this);
   this.voidTime = voidTime(this);
   this.openTubeFlowVelocity = openTubeFlowVelocity(this);
   this.chromatographicFlowVelocity = chromatographicFlowVelocity(this);
@@ -168,17 +173,21 @@ var averageMolarVolume = function (simulator) {
   return averageMolarVolume /= simulator.compounds.length;
 };
 
-// Calculate backpressure (in pascals) (Darcy equation)
-// See Thompson, J. D.; Carr, P. W. Anal. Chem. 2002, 74, 4150-4159.
-// Backpressure in units of Pa
+/*
+Calculate backpressure (in pascals) (Darcy equation)
+See Thompson, J. D.; Carr, P. W. Anal. Chem. 2002, 74, 4150-4159.
+Backpressure in units of Pa
+*/
 var backpressure = function (simulator) {
-  var velocity = simulator.openTubeVelocity / 100;
+  var velocity = simulator.openTubeFlowVelocity / 100;
   var length = simulator.column.length / 1000;
   var viscosity = simulator.eluentViscosity / 1000;
   var porosity = simulator.column.interparticlePorosity;
+  var particleSize = simulator.column.particleSize / 1000000;
 
   var numerator = velocity * length * viscosity * 180 * Math.pow(1 - porosity, 2);
-  var denominator = Math.pow(porosity, 3) * Math.pow(simulator.column.particleSize / 1000000, 2);
+  var denominator = Math.pow(porosity, 3) * Math.pow(particleSize, 2);
+
   return numerator / denominator;
 };
 
@@ -238,6 +247,14 @@ var kelvin = function (temperature) {
 /* units: cm/sec */
 var openTubeFlowVelocity = function (simulator) {
   return (simulator.flowRate / 60) / simulator.column.area * 100;
+};
+
+var postTubingVolume = function (simulator) {
+  var length = simulator.postTubingLength / 100;
+  var radius = (simulator.postTubingDiameter * 2.54e-5) / 2;
+  var area = Math.PI * Math.pow(radius, 2);
+  
+  return length * (area * 1e9);
 };
 
 var reducedFlowVelocity = function (simulator) {

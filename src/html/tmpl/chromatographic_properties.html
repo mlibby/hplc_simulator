@@ -17,39 +17,39 @@
     <legend>Flow Velocity</legend>
     <md-input-container>
       <label>Open tube (cm/second)</label>
-      <input type="number" readonly step="0.0001" ng-model="ctrl.simulator.openTubeFlowVelocity" />
+      <input readonly ng-model="ctrl.simulator.openTubeFlowVelocity" />
     </md-input-container>
     <md-input-container>
       <label>Interstitial (cm/second)</label>
-      <input type="number" readonly step="0.0001" ng-model="ctrl.simulator.interstitialFlowVelocity" />
+      <input readonly ng-model="ctrl.simulator.interstitialFlowVelocity" />
     </md-input-container>
     <md-input-container>
       <label>Chromatographic (cm/second)</label>
-      <input type="number" readonly step="0.0001" ng-model="ctrl.simulator.chromatographicFlowVelocity" />
+      <input readonly ng-model="ctrl.simulator.chromatographicFlowVelocity" />
     </md-input-container>
     <md-input-container>
       <label>Reduced</label>
-      <input type="number" readonly step="0.0001" ng-model="ctrl.simulator.reducedFlowVelocity" />
+      <input readonly ng-model="ctrl.simulator.reducedFlowVelocity" />
     </md-input-container>
   </fieldset>
   <md-input-container>
     <label>Void time (seconds)</label>
-    <input type="number" step="0.0001" ng-model="ctrl.simulator.voidTime" />
+    <input readonly ng-model="ctrl.simulator.voidTime" />
   </md-input-container>
   <md-input-container>
     <label>HETP (cm)</label>
-    <input type="number" readonly step="0.0001" ng-model="ctrl.simulator.hetp" />
+    <input readonly ng-model="ctrl.simulator.hetp" />
   </md-input-container>
   <md-input-container>
     <label>Reduced plate height (units?)</label>
-    <input type="number" step="0.1" ng-model="ctrl.simulator.plateHeight" />
+    <input readonly ng-model="ctrl.simulator.reducedPlateHeight" />
   </md-input-container>
   <md-input-container>
     <label>Theoretical Plates</label>
-    <input type="number" readonly ng-model="ctrl.simulator.theoreticalPlates" />
+    <input readonly ng-model="ctrl.simulator.theoreticalPlates" />
   </md-input-container>
   <md-input-container>
     <label>Backpressure (bar)</label>
-    <input type="number" readonly step="0.1" ng-model="ctrl.simulator.backpressure" />
+    <input readonly step="0.1" ng-model="ctrl.simulator.backpressureBar" />
   </md-input-container>
 </fieldset>
