@@ -30,22 +30,18 @@ describe('HPLC.Simulator', function() {
   });
 
   it('calculates open tube flow velocity in cm/sec', function() {
-    // simulator.flowRate / simulator.column.area;
     expect(simulator.openTubeFlowVelocity).toBeAround(0.20057333722986187);
   });
 
   it('calculates chromatographic flow velocity in cm/sec', function () {
-    // simulator.openTubeFlowVelocity / simulator.column.totalPorosity;
     expect(simulator.chromatographicFlowVelocity).toBeAround(0.31339583942165916);
   })
 
   it('calculates interstitial flow velocity in cm/sec', function () {
-    // simulator.openTubeFlowVelocity / simulator.column.interparticlePorosity;
     expect(simulator.interstitialFlowVelocity).toBeAround(0.5014333430746546);
   });
 
   it('calculates reduced flow velocity (in cm/sec?)', function () {
-    //((simulator.column.particleSize / 10000) * simulator.interstitialFlowVelocity) / simulator.diffusionCoefficient;
     expect(simulator.reducedFlowVelocity).toBeAround(12.296792167141993);
   });
 
@@ -53,12 +49,16 @@ describe('HPLC.Simulator', function() {
     expect(simulator.voidTime).toBeAround(31.908528263980802);
   });
 
+  it('calculates reduced plate height', function () {
+    expect(simulator.reducedPlateHeight).toBeAround(2.021449717);
+  });
+
   it('calculates HETP in cm', function () {
     expect(simulator.hetp).toBeAround(.0006064);
   });
 
   it('calculates theoretical plates', function () {
-    expect(simulator.theoreticalPlates).toBe(16490);
+    expect(simulator.theoreticalPlates).toBeAround(16489.81572567);
   });
 
   it('calculates backpressure in bar', function () {
@@ -78,12 +78,6 @@ describe('HPLC.Simulator', function() {
   });
 
   it('calculates eluent viscosity in cP', function () {
-    // var eluentViscosity = Math.exp(
-    //   (solventFraction * (-3.476 + (726 / simulator.tempKelvin))) +
-    //     ((1 - solventFraction) * (-5.414 + (1566 / simulator.tempKelvin))) +
-    //     (solventFraction * (1 - solventFraction) * (-1.762 + (929 / simulator.tempKelvin)))
-    // );
-
     expect(simulator.eluentViscosity).toBe(0.7688750173397041);
   });
 

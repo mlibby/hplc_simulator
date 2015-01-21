@@ -146,7 +146,10 @@ Simulator.prototype.update = function () {
   this.eluentViscosity = eluentViscosity(this);
   this.diffusionCoefficient = diffusionCoefficient(this);
   this.reducedFlowVelocity = reducedFlowVelocity(this);
+  this.reducedPlateHeight = reducedPlateHeight(this);
   this.backpressure = backpressure(this);
+  this.hetp = hetp(this);
+  this.theoreticalPlates = theoreticalPlates(this);
 };
 
 // Simulator.prototype.update = function () {
@@ -220,6 +223,10 @@ var eluentViscosity = function (simulator) {
   return Math.exp((fraction * (param.a + (param.b / k))) + ((1 - fraction) * (param.c + (param.d / k))) + (fraction * (1 - fraction) * (param.e + (param.f / k))));
 };
 
+var hetp = function (simulator) {
+  return simulator.column.particleSize / 10000 * simulator.reducedPlateHeight;
+};
+
 var interstitialFlowVelocity = function (simulator) {
   return simulator.openTubeFlowVelocity / simulator.column.interparticlePorosity;
 };
@@ -237,8 +244,17 @@ var reducedFlowVelocity = function (simulator) {
   return ((simulator.column.particleSize / 10000) * simulator.interstitialFlowVelocity) / diffusionCoefficient(simulator);
 };
 
+var reducedPlateHeight = function (simulator) {
+  var column = simulator.column;
+  return column.vanDeemterA + (column.vanDeemterB / simulator.reducedFlowVelocity) + (column.vanDeemterC * simulator.reducedFlowVelocity);
+};
+
 var solventMolecularWeight = function (simulator) {
   return (simulator.solventFraction * (simulator.secondarySolvent.molecularWeight - 18)) + 18;
+};
+
+var theoreticalPlates = function (simulator) {
+  return simulator.column.length / 10 / simulator.hetp;
 };
 
 /* units: seconds */
