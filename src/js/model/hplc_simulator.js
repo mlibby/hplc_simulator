@@ -146,6 +146,7 @@ Simulator.prototype.update = function () {
   this.eluentViscosity = eluentViscosity(this);
   this.diffusionCoefficient = diffusionCoefficient(this);
   this.reducedFlowVelocity = reducedFlowVelocity(this);
+  this.backpressure = backpressure(this);
 };
 
 // Simulator.prototype.update = function () {
@@ -164,19 +165,53 @@ var averageMolarVolume = function (simulator) {
   return averageMolarVolume /= simulator.compounds.length;
 };
 
+// Calculate backpressure (in pascals) (Darcy equation)
+// See Thompson, J. D.; Carr, P. W. Anal. Chem. 2002, 74, 4150-4159.
+// Backpressure in units of Pa
+var backpressure = function (simulator) {
+  var velocity = simulator.openTubeVelocity / 100;
+  var length = simulator.column.length / 1000;
+  var viscosity = simulator.eluentViscosity / 1000;
+  var porosity = simulator.column.interparticlePorosity;
+
+  var numerator = velocity * length * viscosity * 180 * Math.pow(1 - porosity, 2);
+  var denominator = Math.pow(porosity, 3) * Math.pow(simulator.column.particleSize / 1000000, 2);
+  return numerator / denominator;
+};
+
 var chromatographicFlowVelocity = function (simulator) {
   return simulator.openTubeFlowVelocity / simulator.column.totalPorosity;
 };
 
+/*
+Calculate the average diffusion coefficient using Wilke-Chang
+empirical determination. See Wilke, C. R.; Chang, P. AICHE J. 1955, 1,
+264-270.
+
+http://onlinelibrary.wiley.com/doi/10.1002/aic.690010222/pdf
+*/
 var diffusionCoefficient = function (simulator) {
-  var assocParam = associationParameter(simulator);
-  var smw = solventMolecularWeight(simulator);
-  var k = kelvin(simulator.temperature);
-  var avgMolarVol = averageMolarVolume(simulator);
-  var numerator = 0.000000074 * (Math.pow(assocParam * smw, 0.5) * k);
-  var denominator = simulator.eluentViscosity * Math.pow(avgMolarVol, 0.6);
-  return numerator / denominator;
+  var x = associationParameter(simulator);
+  var M = solventMolecularWeight(simulator);
+  var T = kelvin(simulator.temperature);
+  var n = simulator.eluentViscosity;
+  var v = averageMolarVolume(simulator);
+  
+  var numer = Math.pow(x * M, 0.5) * T;
+  var denom = n * Math.pow(v, 0.6);
+  return 7.4e-8 * (numer / denom);
 };
+
+/*
+This formula is for acetonitrile/water mixtures:
+See Chen, H.; Horvath, C. Analytical Methods and Instrumentation. 1993, 1, 213-222.
+http://www.speciation.net/Database/Journals/Analytical-Methods-and-Instrumentation-;i289
+
+This formula is for methanol/water mixtures:
+Based on fit of data (at 1 bar) in Journal of Chromatography A, 1210 (2008) 30-44.
+
+The formula is the same in both mixtures, but input values vary.
+*/
 
 var eluentViscosity = function (simulator) {
   var fraction = simulator.solventFraction;

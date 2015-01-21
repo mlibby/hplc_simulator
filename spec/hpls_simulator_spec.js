@@ -7,7 +7,7 @@ describe('HPLC.Simulator', function() {
   });
 
   /* Mobile Phase Composition values */
-  
+
   it('has mobile phase composition defaults', function() {
     expect(simulator.primarySolvent).toBe(HPLC.primarySolvents.water);
     expect(simulator.secondarySolvent).toBe(HPLC.secondarySolvents.acetonitrile);
@@ -22,7 +22,7 @@ describe('HPLC.Simulator', function() {
   /* Plot Options */
 
   /* Chromatographic Properties */
-  
+
   it('has chromatographic defaults', function() {
     expect(simulator.temperature).toBe(25.0);
     expect(simulator.injectionVolume).toBe(5.0);
@@ -31,30 +31,30 @@ describe('HPLC.Simulator', function() {
 
   it('calculates open tube flow velocity in cm/sec', function() {
     // simulator.flowRate / simulator.column.area;
-    expect(simulator.openTubeFlowVelocity).toBe(0.20057333722986187);
+    expect(simulator.openTubeFlowVelocity).toBeAround(0.20057333722986187);
   });
 
   it('calculates chromatographic flow velocity in cm/sec', function () {
     // simulator.openTubeFlowVelocity / simulator.column.totalPorosity;
-    expect(simulator.chromatographicFlowVelocity).toBe(0.31339583942165916);
+    expect(simulator.chromatographicFlowVelocity).toBeAround(0.31339583942165916);
   })
 
   it('calculates interstitial flow velocity in cm/sec', function () {
     // simulator.openTubeFlowVelocity / simulator.column.interparticlePorosity;
-    expect(simulator.interstitialFlowVelocity).toBe(0.5014333430746546);
+    expect(simulator.interstitialFlowVelocity).toBeAround(0.5014333430746546);
   });
 
   it('calculates reduced flow velocity (in cm/sec?)', function () {
     //((simulator.column.particleSize / 10000) * simulator.interstitialFlowVelocity) / simulator.diffusionCoefficient;
-    expect(simulator.reducedFlowVelocity).toBe(12.2968);
+    expect(simulator.reducedFlowVelocity).toBeAround(12.296792167141993);
   });
 
   it('calculates the void time in seconds', function () {
-    expect(simulator.voidTime).toBe(31.908528263980802);
+    expect(simulator.voidTime).toBeAround(31.908528263980802);
   });
 
   it('calculates HETP in cm', function () {
-    expect(simulator.hetp).toBe(.0006064);
+    expect(simulator.hetp).toBeAround(.0006064);
   });
 
   it('calculates theoretical plates', function () {
@@ -66,7 +66,7 @@ describe('HPLC.Simulator', function() {
   });
 
   /* General Properties */
-  
+
   it('has general defaults', function() {
     expect(simulator.timeConstant).toBe(0.1);
     expect(simulator.signalOffset).toBe(0);
@@ -88,13 +88,11 @@ describe('HPLC.Simulator', function() {
   });
 
   it('calculates diffusion coefficient in cm^2/sec', function () {
-    //     var diffusionCoefficient = 0.000000074 * (Math.pow(simulator.associationParameter * simulator.solventMolecularWeight, 0.5) * simulator.tempKelvin) / (simulator.eluentViscosity * Math.pow(simulator.averageMolarVolume, 0.6));
-
-    expect(simulator.diffusionCoefficient).toEqual(0.00001223327196863238);
+    expect(simulator.diffusionCoefficient).toBeAround(0.000012233271);
   });
 
   /* Column Properties */
-  
+
   it('has the default column', function() {
     var defaultColumn = new HPLC.Column('Agilent Zorbax SB-C18');
     expect(simulator.column.name).toBe('Agilent Zorbax SB-C18');
