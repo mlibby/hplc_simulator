@@ -7,12 +7,15 @@ var Compound = function (compoundName, solventName, concentration) {
   var compound =  CompoundProperties[compoundName];
   this.molarVolume = compound.molarVolume;
   
-  
   var properties = compound[solventName];
   this.logKwTslope = properties.logKwTslope;
   this.logKwTintercept = properties.logKwTintercept;
   this.sTslope = properties.sTslope;
   this.sTintercept = properties.sTintercept;
+};
+
+Compound.prototype.k = function (fraction, temperature) {
+  return 0;
 };
 
 exports.Compound = Compound;

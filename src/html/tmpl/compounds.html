@@ -1,18 +1,18 @@
 <h2 class="md-subheader">Compounds</h2>
-<table>
+<table class='compounds'>
   <tr class="md-primary">
-    <th>Compound</th>
-    <th>Concentration (&mu;M)</th>
-    <th>k&prime;</th>
-    <th>tR (s)</th>
-    <th>0<sub>total</sub> (s)</th>
+    <th class='name'>Compound</th>
+    <th title="Concentration">Conc. (&mu;M)</th>
+    <th title="Retention Factor">k</th>
+    <th title="Retention Time">t<sub>R</sub> (sec)</th>
+    <th>&sigma;<sub>total</sub> (s)</th>
     <th>W (pmol)</th>
   </tr>
   <tr ng-repeat='compound in ctrl.simulator.compounds'>
-    <td>{{ compound.name }}</td>
+    <td class='name'>{{ compound.name }}</td>
     <td>{{ compound.concentration }}</td>
-    <td>{{ compound.kPrime }}</td>
-    <td>{{ compound.tR }}</td>
+    <td>{{ compound.retentionFactor }}</td>
+    <td>{{ compound.retentionTime }}</td>
     <td>{{ compound.omThing }}</td>
     <td>{{ compound.w }}</td>
   </tr>
