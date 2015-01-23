@@ -3,7 +3,7 @@
   <label>
     <span>Solvent A</span>
     <md-radio-group ng-model="ctrl.simulator.primarySolvent">
-      <md-radio-button ng-repeat="(key, solvent) in ctrl.primarySolvents()" ng-value="solvent.name" aria-label="{{ solvent.name }}">
+      <md-radio-button ng-repeat="(key, solvent) in ctrl.primarySolvents()" ng-value="solvent" aria-label="{{ solvent.name }}">
         {{ solvent.name }}
       </md-radio-button>
     </md-radio-group>
@@ -11,7 +11,7 @@
   <label>
     <span>Solvent B</span>
     <md-radio-group ng-model="ctrl.simulator.secondarySolvent">
-      <md-radio-button ng-repeat="(key, solvent) in ctrl.secondarySolvents()" ng-value="solvent.name" aria-label="{{ solvent.name }}">
+      <md-radio-button ng-repeat="(key, solvent) in ctrl.secondarySolvents()" ng-value="solvent" aria-label="{{ solvent.name }}">
         {{ solvent.name }}
       </md-radio-button>
     </md-radio-group>
