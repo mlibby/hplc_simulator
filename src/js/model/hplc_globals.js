@@ -34,8 +34,12 @@ exports.globals = {
   },
 
   elutionModes: {
-    gradient: 'Gradient',
-    isocratic: 'Isocratic'
+    gradient: {
+      name: 'Gradient',
+    },
+    isocratic: {
+      name: 'Isocratic',
+    }
   },
 
   secondPlotOptions: [
