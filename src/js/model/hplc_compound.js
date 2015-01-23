@@ -1,10 +1,12 @@
+'use strict';
+
 var HPLC = require("./hplc_globals.js");
 
 var Compound = function (compoundName, solventName, concentration) {
   this.name = compoundName;
   this.concentration = concentration;
 
-  var compound =  CompoundProperties[compoundName];
+  var compound =  compoundProperties[compoundName];
   this.molarVolume = compound.molarVolume;
   
   var properties = compound[solventName];
@@ -14,8 +16,11 @@ var Compound = function (compoundName, solventName, concentration) {
   this.sTintercept = properties.sTintercept;
 };
 
-Compound.prototype.k = function (fraction, temperature) {
-  return 0;
+Compound.prototype.kprime = function (fraction, temperature) {
+  var logkprimew1 = this.logKwTslope * temperature + this.logKwTintercept;
+  var s1 = -1 * ((this.sTslope * temperature) + this.sTintercept);
+  var kprime = Math.pow(10, logkprimew1 - (s1 * fraction));
+  return kprime;
 };
 
 exports.Compound = Compound;
@@ -38,7 +43,7 @@ exports.Compound = Compound;
 
 /* TODO: load from database or file */
 
-CompoundProperties = {
+var compoundProperties = {
   phenol: {
     molarVolume: 103.4,
     'Acetonitrile': {

@@ -3,7 +3,7 @@
   <tr class="md-primary">
     <th class='name'>Compound</th>
     <th title="Concentration">Conc. (&mu;M)</th>
-    <th title="Retention Factor">k</th>
+    <th title="Retention Factor">k&prime;</th>
     <th title="Retention Time">t<sub>R</sub> (sec)</th>
     <th>&sigma;<sub>total</sub> (s)</th>
     <th>W (pmol)</th>
@@ -11,9 +11,9 @@
   <tr ng-repeat='compound in ctrl.simulator.compounds'>
     <td class='name'>{{ compound.name }}</td>
     <td>{{ compound.concentration }}</td>
-    <td>{{ compound.retentionFactor }}</td>
-    <td>{{ compound.retentionTime }}</td>
-    <td>{{ compound.omThing }}</td>
+    <td>{{ compound.kprime(ctrl.simulator.solventFraction, ctrl.simulator.temperature) }}</td>
+    <td>{{ compound.tR() }}</td>
+    <td>{{ compound.sigma }}</td>
     <td>{{ compound.w }}</td>
   </tr>
 </table>

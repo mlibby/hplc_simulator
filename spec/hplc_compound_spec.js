@@ -20,9 +20,9 @@ describe('HPLC.Compound', function () {
     expect(phenol.sTintercept).toBe(-2.668850);
   });
 
-  it('can calculate retention factor (k)', function () {
+  it('can calculate retention factor (k prime)', function () {
     var phenol = new HPLC.Compound('phenol', HPLC.secondarySolvents.acetonitrile.name);
-    expect(phenol.k(0.5, 25)).toBeAround(1.5321);
+    expect(phenol.kprime(0.5, 25)).toBeAround(1.06982055);
   });
   
 });

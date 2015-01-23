@@ -1,3 +1,5 @@
+'use strict';
+
 var HPLC = require("./hplc_globals.js").globals;
 var Column = require("./hplc_column.js").Column;
 var Compound = require("./hplc_compound.js").Compound;
