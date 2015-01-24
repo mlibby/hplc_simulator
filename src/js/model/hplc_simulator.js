@@ -32,6 +32,14 @@ function Simulator() {
     set: function(value) { flowRate = value; this.update(); }
   });
 
+  var gradientStops = [
+    {time: 0, percent: 5.0},
+    {time: 5, percent: 50}
+  ];
+  Object.defineProperty(this, 'gradientStops', {
+    get: function() { return gradientStops; }
+  });
+  
   var initialTime = 0;
   Object.defineProperty(this, 'initialTime', {
     get: function() { return initialTime; },
@@ -45,12 +53,26 @@ function Simulator() {
     set: function(value) { injectionVolume = value; this.update(); }
   });
 
+  /* uL */
+  var mixingVolume = 200.0;
+  Object.defineProperty(this, 'mixingVolume', {
+    get: function() { return mixingVolume; },
+    set: function(value) { mixingVolume = value; this.update(); }
+  });
+  
   var noise = 2.0;
   Object.defineProperty(this, 'noise', {
     get: function() { return noise ; },
     set: function(value) { noise = value; this.update(); }
   });
 
+  /* uL */
+  var nonMixingVolume = 200.0;
+  Object.defineProperty(this, 'nonMixingVolume', {
+    get: function() { return nonMixingVolume; },
+    set: function(value) { nonMixingVolume = value; this.update(); }
+  });
+  
   var plotPoints = 3000;
   Object.defineProperty(this, 'plotPoints', {
     get: function() { return plotPoints; },
@@ -157,6 +179,8 @@ Simulator.prototype.update = function () {
   this.backpressure = backpressure(this);
   this.hetp = hetp(this);
   this.theoreticalPlates = theoreticalPlates(this);
+  this.dwellVolume = dwellVolume(this);
+  this.dwellTime = dwellTime(this);
 };
 
 // Simulator.prototype.update = function () {
@@ -214,6 +238,16 @@ var diffusionCoefficient = function (simulator) {
   var numer = Math.pow(x * M, 0.5) * T;
   var denom = n * Math.pow(v, 0.6);
   return 7.4e-8 * (numer / denom);
+};
+
+/* units: minutes */
+var dwellTime = function (simulator) {
+  return (simulator.dwellVolume / 1000) / simulator.flowRate;
+};
+
+/* units: uL */
+var dwellVolume = function (simulator) {
+  return simulator.mixingVolume + simulator.nonMixingVolume;
 };
 
 /*

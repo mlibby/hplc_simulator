@@ -26,25 +26,25 @@ fieldset fieldset {
   width: 90%;
 }
 
-table.compounds {
+table {
   border: 2px solid black;
   margin: 16px;
   border-collapse: collapse;
 }
 
-table.compounds th,
-table.compounds td {
+table th,
+table td {
   border: 1px solid #303030;
   width: 12%;
   padding: 6px;
 }
 
-table.compounds th.name,
-table.compounds td.name {
+table th.name,
+table td.name {
   width: 30%;
 }
 
-table.compounds th {
+table th {
   border-bottom: 3px double #303030;
   vertical-align: bottom;
 }

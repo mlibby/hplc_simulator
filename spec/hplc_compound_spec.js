@@ -4,20 +4,20 @@ describe('HPLC.Compound', function () {
     var phenol = new HPLC.Compound('phenol', HPLC.secondarySolvents.acetonitrile.name);
     expect(phenol).not.toBe(null);
     expect(phenol.name).toBe("phenol");
-    expect(phenol.logKwTslope).toBe(-0.007051397);
-    expect(phenol.logKwTintercept).toBe(1.222652803);
-    expect(phenol.sTslope).toBe(0.004948239);
-    expect(phenol.sTintercept).toBe(-2.157819856);
+    expect(phenol.km).toBe(-0.007051397);
+    expect(phenol.kb).toBe(1.222652803);
+    expect(phenol.sm).toBe(0.004948239);
+    expect(phenol.sb).toBe(-2.157819856);
   });
 
   it('can get phenol in methanol', function() {
     var phenol = new HPLC.Compound('phenol', HPLC.secondarySolvents.methanol.name);
     expect(phenol).not.toBe(null);
     expect(phenol.name).toBe("phenol");
-    expect(phenol.logKwTslope).toBe(-0.010465);
-    expect(phenol.logKwTintercept).toBe(1.714002);
-    expect(phenol.sTslope).toBe(0.009040);
-    expect(phenol.sTintercept).toBe(-2.668850);
+    expect(phenol.km).toBe(-0.010465);
+    expect(phenol.kb).toBe(1.714002);
+    expect(phenol.sm).toBe(0.009040);
+    expect(phenol.sb).toBe(-2.668850);
   });
 
   it('can calculate retention factor (k prime)', function () {

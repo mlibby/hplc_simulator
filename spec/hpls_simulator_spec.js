@@ -19,6 +19,27 @@ describe('HPLC.Simulator', function() {
     expect(simulator.solventFraction).toBe(0.5);
   });
 
+  it('has default options for gradient elution mode', function () {
+    simulator.elutionMode = HPLC.elutionModes.gradient;
+    expect(simulator.mixingVolume).toBe(200.0);
+    expect(simulator.nonMixingVolume).toBe(200.0);
+
+    expect(simulator.gradientStops.length).toBe(2);
+    var stopOne = simulator.gradientStops[0];
+    expect(stopOne.time).toBe(0);
+    expect(stopOne.percent).toBe(5);
+
+    var stopTwo = simulator.gradientStops[1];
+    expect(stopTwo.time).toBe(5);
+    expect(stopTwo.percent).toBe(50);
+  });
+
+  it('calculates dwell volume and time', function () {
+    simulator.elutionMode = HPLC.elutionModes.gradient;
+    expect(simulator.dwellVolume).toBe(400.0);
+    expect(simulator.dwellTime).toBe(0.20);
+  });
+
   /* Plot Options */
 
   /* Chromatographic Properties */
