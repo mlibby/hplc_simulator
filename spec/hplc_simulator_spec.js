@@ -3,6 +3,7 @@ describe('HPLC.Simulator', function() {
   var simulator;
 
   beforeEach(function() {
+    console.log("before simulator");
     simulator = new HPLC.Simulator();
   });
 
@@ -135,5 +136,32 @@ describe('HPLC.Simulator', function() {
       new HPLC.Compound('p-nitrotoluene', HPLC.secondarySolvents.acetonitrile.name, 10)
     ];
     expect(simulator.compounds).toEqual(compounds);
+  });
+
+  it('can calculate retention factor (k prime) for a compound in isocratic mode', function () {
+    expect(simulator.kPrime(0)).toBeAround(1.06982055);
+  });
+
+  it('returns NaN for retention factor for a compound in gradient mode', function () {
+    simulator.elutionMode = HPLC.elutionModes.gradient;
+    expect(simulator.kPrime(0)).toEqual(NaN);
+  });
+
+  it('can calculate retention time (tR) for a compound in isocratic mode', function () {
+    expect(simulator.tR(0)).toBeAround(66.0449276);
+  });
+
+  it('can calculate retention time (tR) for a compound in gradient mode', function () {
+    simulator.elutionMode = HPLC.elutionModes.gradient;
+    expect(simulator.tR(0)).toBeAround(195.0360);
+  });
+
+  it('can calculate sigma for a compound in isocratic mode', function () {
+    expect(simulator.sigma(0)).toBeAround(0.5257);
+  });
+
+  it('can calculate sigma for a compound in gradient mode', function () {
+    simulator.elutionMode = HPLC.elutionModes.gradient;
+    expect(simulator.sigma(0)).toBeAround(1.0092);
   });
 });

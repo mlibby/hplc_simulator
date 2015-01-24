@@ -6,11 +6,11 @@
     <input ng-model="ctrl.simulator.eluentViscosity" />
   </md-input-container>
   <md-input-container>
-    <label>Average diffusion coefficient (cm&sup2/s)</label>
+    <label>Average diffusion coefficient (cm&sup2/sec)</label>
     <input ng-model="ctrl.simulator.diffusionCoefficient" />
   </md-input-container>
   <md-input-container>
-    <label>Time Constant (seconds)</label>
+    <label>Time Constant (sec)</label>
     <input type="number" step="0.1" ng-model="ctrl.simulator.timeConstant" />
   </md-input-container>
   <md-input-container>
@@ -26,12 +26,12 @@
       Automatically determine time span
     </md-checkbox>
     <md-input-container>
-      <label>Initial Time (seconds)</label>
-      <input type="number" ng-model="ctrl.simulator.initialTime" />
+      <label>Initial Time (sec)</label>
+      <input type="number" ng-model="ctrl.simulator.initialTime" ng-disabled="ctrl.simulator.autoTimeSpan" />
     </md-input-container>
     <md-input-container>
-      <label>Final Time (seconds)</label>
-      <input type="number" ng-model="ctrl.simulator.finalTime" />
+      <label>Final Time (sec)</label>
+      <input type="number" ng-model="ctrl.simulator.finalTime" ng-disabled="ctrl.simulator.autoTimeSpan" />
     </md-input-container>
   </fieldset>
   <md-input-container>

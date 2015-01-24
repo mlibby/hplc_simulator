@@ -7,6 +7,9 @@ log(k')W1 = km * temperature + kb
 S = sm * temperature + sb
 */
 var Compound = function (compoundName, solventName, concentration) {
+  console.log(compoundName);
+  console.log(solventName);
+  console.log(concentration);
   this.name = compoundName;
   this.concentration = concentration;
 
@@ -30,6 +33,10 @@ Compound.prototype.kprime = function (fraction, temperature) {
   var kprime = Math.pow(10, logkprimew1 - (s1 * fraction));
   return kprime;
 };
+
+Compound.prototype.tR = function (elutionMode, fraction, temperature) {
+  return 0;
+}
 
 exports.Compound = Compound;
 
