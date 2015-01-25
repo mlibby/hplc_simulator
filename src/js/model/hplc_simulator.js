@@ -121,21 +121,57 @@ Simulator.prototype.update = function () {
   this.theoreticalPlates = theoreticalPlates(this);
   this.dwellVolume = dwellVolume(this);
   this.dwellTime = dwellTime(this);
+
+  this.updateCompounds();
 };
 
-Simulator.prototype.kPrime = function (compoundIndex) {
-  if(this.elutionMode === HPLC.elutionModes.gradient) {
-    return NaN;
-  } else {
-    var compound = this.compounds[compoundIndex];
-    var logkprimew1 = compound.km * this.temperature + compound.kb;
-    var s1 = -1 * ((compound.sm * this.temperature) + compound.sb);
-    return Math.pow(10, logkprimew1 - (s1 * this.solventFraction));
+Simulator.prototype.updateCompounds = function () {
+  for(var i = 0; i < this.compounds.length; i++) {
+    var compound = this.compounds[i];
+    compound.kPrime = kPrime(this, compound);
+    compound.tR = tR(this, compound);
+    compound.sigma = sigma(this, compound);
+    compound.w = w(this, compound);
   }
 };
 
-Simulator.prototype.tR = function (compoundIndex) {
-  return this.voidTime * (1 + this.kPrime(compoundIndex));
+var kPrime = function (simulator, compound) {
+  if(simulator.elutionMode === HPLC.elutionModes.gradient) {
+    return NaN;
+  } else {
+    var logkprimew1 = compound.km * simulator.temperature + compound.kb;
+    var s1 = -1 * ((compound.sm * simulator.temperature) + compound.sb);
+    return Math.pow(10, logkprimew1 - (s1 * simulator.solventFraction));
+  }
+};
+
+var tR = function (simulator, compound) {
+  return simulator.voidTime * (1 + compound.kPrime);
+};
+
+var sigma = function (simulator, compound) {
+  var term1 = Math.pow(compound.tR / Math.sqrt(simulator.theoreticalPlates), 2);
+  var term2 = Math.pow(simulator.timeConstant, 2);
+  var term3 = Math.pow((simulator.injectionVolume / 1000.0) / (simulator.flowRate / 60.0), 2);
+  var figure = term1 + term2 + (1.0/12.0) * term3;
+  
+  var sigma = Math.sqrt(figure); // + dTubingTimeBroadening
+  
+  return sigma;
+};
+
+        // // Calculate dispersion that will result from extra-column tubing
+        // // in cm^2
+        // double dTubingZBroadening = (2 * m_dDiffusionCoefficient * this.m_dTubingLength / dTubingOpenTubeVelocity) + ((Math.pow(dTubingRadius, 2) * m_dTubingLength * dTubingOpenTubeVelocity) / (24 * m_dDiffusionCoefficient));
+
+        // // convert to mL^2
+        // double dTubingVolumeBroadening = Math.pow(Math.sqrt(dTubingZBroadening) * Math.PI * Math.pow(dTubingRadius, 2), 2);
+
+        // // convert to s^2
+// double dTubingTimeBroadening = Math.pow((Math.sqrt(dTubingVolumeBroadening) / m_dFlowRate) * 60, 2);
+
+var w = function (simulator, compound) {
+  return 0;
 };
 
 var associationParameter = function (simulator) {

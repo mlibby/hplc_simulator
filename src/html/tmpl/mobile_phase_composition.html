@@ -20,7 +20,7 @@
 <md-subheader id="elution-mode">Elution Mode</md-subheader>
 <fieldset>
   <md-radio-group ng-model="ctrl.simulator.elutionMode" aria-labelledby="elution-mode">
-    <md-radio-button ng-repeat="mode in ctrl.elutionModes()" ng-value="mode" aria-label="{{ mode.name }}">
+    <md-radio-button ng-repeat="mode in ctrl.elutionModes()" ng-value="mode" aria-label="{{ mode.name }}" ng-disabled="mode.name === 'Gradient'">
       {{ mode.name }}
     </md-radio-button>
   </md-radio-group>

@@ -1,4 +1,3 @@
-<h2 class="md-subheader">Compounds</h2>
 <table class="compounds">
   <tr class="md-primary">
     <th class="name">Compound</th>
@@ -10,10 +9,10 @@
   </tr>
   <tr ng-repeat="compound in ctrl.simulator.compounds">
     <td class="name">{{ compound.name }}</td>
-    <td>{{ compound.concentration }}</td>
-    <td>{{ ctrl.simulator.elutionMode.name === "Gradient" ? "--" : compound.kprime(ctrl.simulator.solventFraction, ctrl.simulator.temperature) }}</td>
-    <td>{{ compound.tR() }}</td>
-    <td>{{ compound.sigma }}</td>
-    <td>{{ compound.w }}</td>
+    <td>{{ compound.concentration | number:1}}</td>
+    <td>{{ compound.kPrime | number:4}}</td>
+    <td>{{ compound.tR | number:4}}</td>
+    <td>{{ compound.sigma | number:4}}</td>
+    <td>{{ compound.w | number:4}}</td>
   </tr>
 </table>
