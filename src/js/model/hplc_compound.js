@@ -7,9 +7,6 @@ log(k')W1 = km * temperature + kb
 S = sm * temperature + sb
 */
 var Compound = function (compoundName, solventName, concentration) {
-  console.log(compoundName);
-  console.log(solventName);
-  console.log(concentration);
   this.name = compoundName;
   this.concentration = concentration;
 
@@ -40,24 +37,7 @@ Compound.prototype.tR = function (elutionMode, fraction, temperature) {
 
 exports.Compound = Compound;
 
-/* New Compound Entry Template */
-// 'compound': {
-//   'Acetonitrile': {
-//      km: ,
-//      kb: ,
-//      sm: ,
-//      sb:
-//   },
-//   'Methanol': {
-//      km: ,
-//      kb: ,
-//      sm: ,
-//      sb:
-//   }
-// },
-
 /* TODO: load from database or file */
-
 var compoundProperties = {
   'phenol': {
     mvol: 103.4,

@@ -6,11 +6,6 @@ var Compound = require("./hplc_compound.js").Compound;
 
 exports.Simulator = Simulator;
 
-Object.defineProperty(this, 'autoTimeSpan', {
-  get: function() { return autoTimeSpan; },
-  set: function(value) { autoTimeSpan = value; this.update(); }
-});
-
 function Simulator() {
   var inputs = {
     autoTimeSpan: true,

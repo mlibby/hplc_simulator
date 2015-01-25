@@ -1,4 +1,4 @@
-<h2 class="md-subheader">Mobile Phase Composition</h2>
+<md-subheader>Mobile Phase Composition</md-subheader>
 <fieldset>
   <label>
     <span>Solvent A</span>
@@ -16,14 +16,14 @@
       </md-radio-button>
     </md-radio-group>
   </label>
-  <label>
-    <span>Elution Mode</span>
-    <md-radio-group ng-model="ctrl.simulator.elutionMode">
-      <md-radio-button ng-repeat="mode in ctrl.elutionModes()" ng-value="mode" aria-label="{{ mode.name }}">
-        {{ mode.name }}
-      </md-radio-button>
-    </md-radio-group>
-  </label>
+</fieldset>
+<md-subheader id="elution-mode">Elution Mode</md-subheader>
+<fieldset>
+  <md-radio-group ng-model="ctrl.simulator.elutionMode" aria-labelledby="elution-mode">
+    <md-radio-button ng-repeat="mode in ctrl.elutionModes()" ng-value="mode" aria-label="{{ mode.name }}">
+      {{ mode.name }}
+    </md-radio-button>
+  </md-radio-group>
   <div ng-switch="ctrl.simulator.elutionMode.name">
     <div ng-switch-when="Isocratic">
       <label class="slider-container">
@@ -33,40 +33,43 @@
       </label>
     </div>
     <div ng-switch-when="Gradient">
-      <fieldset>
-        <legend>Stops</legend>
-        <table>
-          <tr>
-            <th>Time (min)</th>
-            <th>% Solvent B</th>
-          </tr>
-          <tr ng-repeat="stop in ctrl.simulator.gradientStops">
-            <td>{{ stop.time }}</td>
-            <td>{{ stop.percent }}</td>
-          </tr>
-        </table>
-        <md-button>Add</md-button>
-        <md-button>Remove</md-button>
-      </fieldset>
-      <fieldset>
-        <legend>Pre-column Volume</legend>
-        <md-input-container>
-          <label>Mixing (&mu;L)</label>
-          <input type="number" step="0.1" ng-model="ctrl.simulator.mixingVolume" />
-        </md-input-container>
-        <md-input-container>
-          <label>Non-mixing (&mu;L)</label>
-          <input type="number" step="0.1" ng-model="ctrl.simulator.nonMixingVolume" />
-        </md-input-container>
-        <md-input-container>
-          <label>Total dwell volume (&mu;L)</label>
-          <input readonly ng-model="ctrl.simulator.dwellVolume" />
-        </md-input-container>
-        <md-input-container>
-          <label>Dwell time (min)</label>
-          <input readonly ng-model="ctrl.simulator.dwellTime" />
-        </md-input-container>
-      </fieldset>
+      <label>Stops</label>
+      <table>
+        <tr>
+          <th id="stop-time">Time (min)</th>
+          <th id="stop-percent">% Solvent B</th>
+          <th></th>
+        </tr>
+        <tr ng-repeat="stop in ctrl.simulator.gradientStops">
+          <td><input ng-model="stop.time" type="text" aria-labelledby="stop-time"/></td>
+          <td><input ng-model="stop.percent" type="text" aria-labelledby="stop-percent" /></td>
+          <td><md-button class="md-raised md-warn">Remove</md-button>
+        </tr>
+        <tr>
+          <td colspan="3">
+            <md-button class="md-raised md-accent">Add Stop</md-button>
+          </td>
+        </tr>
+      </table>
+      <label>Pre-column Volume</label>
+      <md-input-container>
+        <label>Mixing (&mu;L)</label>
+        <input type="number" step="0.1" ng-model="ctrl.simulator.mixingVolume" />
+      </md-input-container>
+      <md-input-container>
+        <label>Non-mixing (&mu;L)</label>
+        <input type="number" step="0.1" ng-model="ctrl.simulator.nonMixingVolume" />
+      </md-input-container>
+      <md-input-container>
+        <label>Total dwell volume (&mu;L)</label>
+        <input readonly ng-model="ctrl.simulator.dwellVolume" />
+      </md-input-container>
+      <md-input-container>
+        <label>Dwell time (min)</label>
+        <input readonly ng-model="ctrl.simulator.dwellTime" />
+      </md-input-container>
     </div>
   </div>
 </fieldset>
+</div>
+</div>

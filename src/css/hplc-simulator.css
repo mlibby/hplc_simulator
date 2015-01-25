@@ -1,3 +1,7 @@
+header {
+  padding: 0 16px;
+}
+
 section h2.md-subheader {
   margin-bottom: 0;
   padding-bottom: 0;
@@ -26,24 +30,30 @@ fieldset fieldset {
 }
 
 table {
-  border: 2px solid black;
-  margin: 16px;
+  border: 0;
+  margin: 0 0 32px;
   border-collapse: collapse;
 }
 
 table th,
 table td {
-  border: 1px solid #303030;
-  width: 12%;
-  padding: 6px;
+  border: 0;
+  padding: 6px 12px;
+  text-align: left;
+  width: auto;
 }
 
-table th.name,
-table td.name {
-  width: 30%;
+table.compounds th.name,
+table.compounds td.name {
+  width: 25%;
+}
+
+table.compounds th,
+table.compounds td {
+  width: 15%;
 }
 
 table th {
-  border-bottom: 3px double #303030;
+  font-weight: normal;
   vertical-align: bottom;
 }

@@ -2,28 +2,21 @@
 
   <md-toolbar class='md-shadow-bottom-z-1' layout='row' layout-align='center start'>
     <header class='md-toolbar-tools'>
-      <md-button ng-click='app.clickNav()' class='icon-nav-menu' aria-label='Nav Menu'></md-button>
       <h1 ng-bind='app.pageTitle'></h1>
       <span flex></span>
-      <md-button ng-click='app.clickMenu()' class='icon-menu' aria-label='Other Menu'></md-button>
+      <md-button ng-click='app.clickNav()' class='icon-nav-menu' aria-label='Navigation Menu'><span>Menu</span></md-button>
     </header>
   </md-toolbar>
   
   <md-content layout='column' layout-align='start start' md-scroll-y>
 
-    <md-sidenav md-component-id='left' class='md-sidenav-left'>
-      <ul>
-        <li><a href='/' ng-click='app.clickNav()'>Home</a></li>
-        <li><a href='/simulator' ng-click='app.clickNav()'>Simulator</a></li>
-      </ul>
-    </md-sidenav>
     
     <main role='main' ng-view='' ></main>
     
     <md-sidenav md-component-id='right' class='md-sidenav-right'>
       <ul>
-        <li><a href='/help' ng-click='app.clickMenu()'>Help</a></li>
-        <li><a href='/settings' ng-click='app.clickMenu()'>Settings</a></li>
+        <li><a href='/' ng-click='app.clickNav()'>Home</a></li>
+        <li><a href='/simulator' ng-click='app.clickNav()'>Simulator</a></li>
       </ul>
     </md-sidenav>
     
