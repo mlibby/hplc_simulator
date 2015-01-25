@@ -18,11 +18,6 @@
   };
 
   AppCtrl.prototype.clickNav = function _clickNav() {
-    this.sidenav('left').toggle();
-  };
-
-  AppCtrl.prototype.clickMenu = function _clickNav() {
     this.sidenav('right').toggle();
   };
-
 })();

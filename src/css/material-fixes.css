@@ -3,6 +3,13 @@ md-toolbar .md-button {
   border: 1px solid white;
 }
 
+md-toolbar .md-button [class*=" icon-"],
+md-toolbar .md-button [class^="icon-"] {
+  font-size: 24px;
+  vertical-align: bottom;
+  line-height: 20px;
+}
+
 md-toolbar .md-button:before {
   font-size: 32px;
 }

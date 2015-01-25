@@ -11,6 +11,7 @@
       $routeProvider
         .when('/', {templateUrl: '/html/home.html'})
         .when('/simulator', {templateUrl: '/html/simulator.html'})
+        .when('/references', {templateUrl: '/html/references.html'})
         .otherwise({ redirectTo: '/' });
     });
 
