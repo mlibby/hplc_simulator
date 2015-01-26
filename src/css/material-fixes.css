@@ -1,3 +1,7 @@
+:focus {
+  border: 1px dotted #808080 !important;
+}
+
 md-toolbar .md-button {
   color: white;
   border: 1px solid white;
