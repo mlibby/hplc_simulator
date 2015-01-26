@@ -75,3 +75,7 @@ md-whiteframe {
   margin: 12px;
   padding: 12px;
 }
+
+.md-sidenav-right {
+  position: fixed;
+}
