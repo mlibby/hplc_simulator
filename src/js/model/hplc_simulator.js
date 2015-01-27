@@ -177,7 +177,8 @@ var w = function (simulator, compound) {
 };
 
 var associationParameter = function (simulator) {
-  return ((1 - simulator.solventFraction) * (2.6 - 1.9)) + 1.9;
+  // return ((1 - simulator.solventFraction) * (2.6 - 1.9)) + 1.9;
+  return ((1 - simulator.solventFraction) * 0.7) + 1.9;
 };
 
 var averageMolarVolume = function (simulator) {

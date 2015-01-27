@@ -57,3 +57,9 @@ table th {
   font-weight: normal;
   vertical-align: bottom;
 }
+
+.line {
+  stroke: black;
+  stroke-width: 1.5px;
+  fill: none;
+}

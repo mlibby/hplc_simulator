@@ -8,7 +8,7 @@ module.exports = function(grunt) {
         dest: 'dist/dev/js/hplc.js'
       },
     },
-    
+
     clean: {
       devCss: ["dist/dev/css/hplc.css"],
       devCssLibs: ["dist/dev/css/libs.css"],
@@ -50,7 +50,7 @@ module.exports = function(grunt) {
         dest: 'dist/dev/js/libs.js'
       }
     },
-    
+
     copy: {
       devHtml: {
         cwd: 'src/html',
@@ -81,7 +81,7 @@ module.exports = function(grunt) {
         }
       }
     },
-    
+
     filerev: {
       options: {
         algorithm: 'md5',
@@ -94,7 +94,7 @@ module.exports = function(grunt) {
         src: 'dist/prod/css/*.css',
       }
     },
-    
+
     jasmine: {
       hplc: {
         src: 'dist/dev/js/hplc.js',
@@ -105,7 +105,7 @@ module.exports = function(grunt) {
         }
       }
     },
-    
+
     uglify: {
       options: {
         mangle: false,
@@ -117,7 +117,7 @@ module.exports = function(grunt) {
         dest: 'dist/prod/js/hplc.js'
       }
     },
-    
+
     watch: {
       css: {
         files: 'src/css/**/*.css',
@@ -143,13 +143,13 @@ module.exports = function(grunt) {
       },
 
       js: {
-         files: 'src/js/**/*.js',
-         tasks: ['build-dev-js']
+        files: 'src/js/**/*.js',
+        tasks: ['build-dev-js', 'jasmine']
       },
 
       jsLibs: {
         files: 'bower_components/**/*.js}',
-        tasks: ['build-dev-js-libs']
+        tasks: ['build-dev-js-libs', 'jasmine']
       },
     },
 
@@ -172,7 +172,7 @@ module.exports = function(grunt) {
       grunt.log.writeln(f);
     }
   });
-  
+
   grunt.registerTask('rev-prod', ['filerev', 'use-rev']);
 
   grunt.registerTask('build-dev-css', ['clean:devCss', 'concat:css']);
@@ -180,9 +180,9 @@ module.exports = function(grunt) {
   grunt.registerTask('build-dev-css-libs', ['clean:devCssLibs', 'concat:cssLibs']);
 
   grunt.registerTask('build-dev-fonts', ['clean:devFonts', 'copy:devFonts']);
-  
+
   grunt.registerTask('build-dev-html', ['clean:devHtml', 'copy:devHtml']);
-  
+
   grunt.registerTask('build-dev-js', ['clean:devJs', 'browserify']);
 
   grunt.registerTask('build-dev-js-libs', ['clean:devJsLibs', 'concat:jsLibs']);
@@ -195,7 +195,7 @@ module.exports = function(grunt) {
     'build-dev-js',
     'build-dev-js-libs',
   ]);
-  
+
   grunt.registerTask('build-prod-js', [
     'clean:devJs',
     'clean:prodJs',
@@ -207,35 +207,34 @@ module.exports = function(grunt) {
     'build-prod-js',
     'rev-prod',
   ]);
-  
-//   grunt.registerTask('tdd', [
-//     'clean',
-//     'copy-dev',
-//     'express:dev',
-//     'karma:unit'
-//   ]);
 
-//   grunt.registerTask('build-js', [
-//     'clean:js',
-//     'browserify',
-//     'copy:devJs',
-//     'useminPrepare',
-//     'uglify:generated',
-//     'filerev:js',
-//     'usemin',
-//   ]);
-  
-//   grunt.registerTask('build', [
-//     'clean',
-//     'browserify',
-//     'copy-dev',
-//     'useminPrepare',
-//     'concat:generated',
-//     'cssmin:generated',
-//     'uglify:generated',
-//     'filerev',
-//     'usemin',
-//   ]);
+    grunt.registerTask('tdd', [
+      'build-dev',
+      'express:dev',
+      'watch',
+    ]);
+
+  //   grunt.registerTask('build-js', [
+  //     'clean:js',
+  //     'browserify',
+  //     'copy:devJs',
+  //     'useminPrepare',
+  //     'uglify:generated',
+  //     'filerev:js',
+  //     'usemin',
+  //   ]);
+
+  //   grunt.registerTask('build', [
+  //     'clean',
+  //     'browserify',
+  //     'copy-dev',
+  //     'useminPrepare',
+  //     'concat:generated',
+  //     'cssmin:generated',
+  //     'uglify:generated',
+  //     'filerev',
+  //     'usemin',
+  //   ]);
 
 
   grunt.registerTask('default', ['tdd']);
