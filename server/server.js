@@ -6,13 +6,15 @@ var app = express();
 
 app.set('port', (process.env.PORT || 5000));
 
-app.set('views', 'dist/html');
+var prefix = 'dist/dev/';
+
+app.set('views', prefix + 'html');
 app.engine('html', ejs.renderFile);
 
-app.use('/css', express.static('dist/css'));
-app.use('/html', express.static('dist/html'));
-app.use('/img', express.static('dist/img'));
-app.use('/js', express.static('dist/js'));
+app.use('/css', express.static(prefix + 'css'));
+app.use('/html', express.static(prefix + 'html'));
+app.use('/img', express.static(prefix + 'img'));
+app.use('/js', express.static(prefix + 'js'));
 
 app.all('*', function(request, response) {
     response.render('index.html');

@@ -5,63 +5,66 @@ module.exports = function(grunt) {
     browserify: {
       hplc: {
         src: ['src/js/manifest.js'],
-        dest: 'src/js/browserified.js'
+        dest: 'dist/dev/js/hplc.js'
       },
     },
     
     clean: {
-      js: ["dist/js/*.js"],
-      css: ["dist/css/*"],
-      html: ["dist/html/*"]
+      devCss: ["dist/dev/css/hplc.css"],
+      devCssLibs: ["dist/dev/css/libs.css"],
+      devFonts: ["dist/dev/css/fonts/*"],
+      devHtml: ["dist/dev/html/*"],
+      devJs: ["dist/dev/js/hplc.js"],
+      devJsLibs: ["dist/dev/js/libs.js"],
+      prodCss: ["dist/prod/css/*.css"],
+      prodHtml: ["dist/prod/html/*.html"],
+      prodJs: ["dist/prod/js/*.js"],
     },
 
+    concat: {
+      options: {
+        separator: '\n;',
+      },
+      css: {
+        src: ['src/css/*.css'],
+        dest: 'dist/dev/css/hplc.css'
+      },
+      cssLibs: {
+        src: [
+          'bower_components/angular/angular-csp.css',
+          'bower_components/angular-material/angular-material.min.css',
+          'src/material-design-icons/style.css'
+        ],
+        dest: 'dist/dev/css/libs.css'
+      },
+      jsLibs: {
+        src: [
+          "bower_components/hammerjs/hammer.min.js",
+          "bower_components/angular/angular.min.js",
+          "bower_components/angular-route/angular-route.min.js",
+          "bower_components/angular-aria/angular-aria.min.js",
+          "bower_components/angular-animate/angular-animate.min.js",
+          "bower_components/angular-material/angular-material.min.js",
+          "bower_components/d3/d3.min.js",
+        ],
+        dest: 'dist/dev/js/libs.js'
+      }
+    },
+    
     copy: {
-      bowerJs: {
-        expand: true,
-        flatten: true,
-        cwd: 'bower_components',
-        src: ['angular-mocks/angular-mocks.js',
-              '*/*.min.js',
-              '**/dist/*.js'
-             ],
-        dest: 'src/js/libs/'
-      },
-      bowerCss: {
-        expand: true,
-        flatten: true,
-        cwd: 'bower_components',
-        src: ['*/*.css', '**/dist/*.css', '**/dist/themes/*.css', '**/themes/*.css'],
-        dest: 'src/css/libs/'
-      },
       devHtml: {
         cwd: 'src/html',
         expand: true,
         flatten: true,
         src: ['**/*.html'],
-        dest: 'dist/html/'
+        dest: 'dist/dev/html/'
       },
-      devCss: {
-        expand: true,
-        cwd: 'src/css',
-        src: ['**/*.css'],
-        dest: 'dist/css/'
-      },
-      devJs: {
-        expand: true,
-        cwd: 'src/js',
-        src: ['browserified.js'],
-        dest: 'dist/js/'
-      },
-      devIconCss: {
-        src: 'src/material-design-icons/style.css',
-        dest: 'dist/css/icons.css'
-      },
-      devIconFont: {
+      devFonts: {
         flatten: true,
         expand: true,
         cwd: 'src/material-design-icons',
         src: 'fonts',
-        dest: 'dist/css/'
+        dest: 'dist/dev/css/'
       },
     },
 
@@ -71,96 +74,63 @@ module.exports = function(grunt) {
         length: 8
       },
       js: {
-        src: 'dist/js/*.js'
+        src: 'dist/prod/js/*.js',
       },
       css: {
-        src: 'dist/css/*.css'
+        src: 'dist/prod/css/*.css',
       }
     },
-
+    
     uglify: {
       options: {
         mangle: false,
-        compress: false,
-        beautify: true
+        compress: true,
+        beautify: false
+      },
+      js: {
+        src: 'dist/dev/js/hplc.js',
+        dest: 'dist/prod/js/hplc.js'
       }
     },
-
+    
     cssMin: {
       options: {
       }
     },
-
-    useminPrepare: {
-      options: {
-        dest: 'dist',
-        root: '.'
-      },
-      html: 'dist/html/*.html'
-    },
-
-    usemin: {
-      options: {
-        blockReplacements: {
-          js: function (block) {
-            grunt.verbose.writeln('summary = ' + grunt.filerev.summary);
-            dest = 'dist/' + block.dest;
-            target = grunt.filerev.summary[dest].replace('dist/', '');
-            return '<script src="' + target + '"></script>';
-          },
-          css: function (block) {
-            grunt.verbose.writeln('summary = ' + grunt.filerev.summary);
-            dest = 'dist/' + block.dest;
-            target = grunt.filerev.summary[dest].replace('dist/', '');
-            return "<link rel='stylesheet' href='" + target + "' type='text/css'>";
-          }
-
-        }
-      },
-
-      html: ['dist/html/index.html']
-    },
-
+    
     watch: {
-      bowerJs: {
-        files: 'bower_components/**/*.js}',
-        tasks: ['copy:bowerJs']
-      },
-
-      bowerCss: {
-        files: 'bower_components/**/*.css}',
-        tasks: ['copy:bowerCss']
-      },
-
-      // js: {
-      //   files: 'src/js/**/*.js',
-      //   tasks: ['copy:devJs']
-      // },
-
       css: {
         files: 'src/css/**/*.css',
-        tasks: ['copy:devCss'],
+        tasks: ['build-dev-css'],
       },
 
-      tmpl: {
-        files: 'src/html/tmpl/**/*.html',
-        tasks: ['copy:devHtml']
+      cssLibs: {
+        files: [
+          'bower_components/**/*.css}',
+          'src/material-design-icons/style.css'
+        ],
+        tasks: ['build-dev-css-libs']
+      },
+
+      fonts: {
+        files: 'src/material-design-icons/fonts',
+        tasks: ['build-dev-fonts']
       },
 
       html: {
-        files: 'src/html/build/**/*.html',
-        tasks: ['copy:devHtml']
+        files: 'src/html/**/*.html',
+        tasks: ['build-dev-html']
       },
 
-      iconCss: {
-        files: 'src/material-design-icons/style.css',
-        tasks: ['copy:devIconCss']
+      js: {
+         files: 'src/js/**/*.js',
+         tasks: ['build-dev-js']
       },
-      
-      iconFont: {
-        files: 'src/material-design-icons/fonts',
-        tasks: ['copy:devIconFont']
-      }
+
+      jsLibs: {
+        files: 'bower_components/**/*.js}',
+        tasks: ['build-dev-js-libs']
+      },
     },
 
     express: {
@@ -171,59 +141,88 @@ module.exports = function(grunt) {
         }
       }
     },
-
-    karma: {
-      unit: {
-        configFile: 'karma.conf.js',
-        autoWatch: true
-      }
-    }
   });
 
+  grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-express-server');
   grunt.loadNpmTasks('grunt-filerev');
-  grunt.loadNpmTasks('grunt-browserify');
-  grunt.loadNpmTasks('grunt-karma');
-  grunt.loadNpmTasks('grunt-usemin');
+  grunt.loadNpmTasks('grunt-express-server');
 
-  grunt.registerTask('copy-build', [
-    'copy:devCss',
-//    'copy:devJs',
-    'copy:devHtml',
-    'copy:devIconCss',
-    'copy:devIconFont'
+  grunt.registerTask('use-rev', "replace css/js file references with revved file names", function () {
+    grunt.verbose.writeln('summary = ' + grunt.filerev.summary);
+    for(var f in grunt.filerev.summary) {
+      grunt.log.writeln(f);
+    }
+  });
+  
+  grunt.registerTask('rev-prod', ['filerev', 'use-rev']);
+
+  grunt.registerTask('build-dev-css', ['clean:devCss', 'concat:css']);
+
+  grunt.registerTask('build-dev-css-libs', ['clean:devCssLibs', 'concat:cssLibs']);
+
+  grunt.registerTask('build-dev-fonts', ['clean:devFonts', 'copy:devFonts']);
+  
+  grunt.registerTask('build-dev-html', ['clean:devHtml', 'copy:devHtml']);
+  
+  grunt.registerTask('build-dev-js', ['clean:devJs', 'browserify']);
+
+  grunt.registerTask('build-dev-js-libs', ['clean:devJsLibs', 'concat:jsLibs']);
+
+  grunt.registerTask('build-dev', [
+    'build-dev-css',
+    'build-dev-css-libs',
+    'build-dev-fonts',
+    'build-dev-html',
+    'build-dev-js',
+    'build-dev-js-libs',
   ]);
-
-  grunt.registerTask('copy-dev', [
-    'copy:bowerCss',
-    'copy:bowerJs',
-    'copy-build'
-  ]);
-
-  grunt.registerTask('tdd', [
-    'clean',
-    'copy-dev',
-    'express:dev',
-    'karma:unit'
-  ]);
-
-  grunt.registerTask('build', [
-    'clean',
+  
+  grunt.registerTask('build-prod-js', [
+    'clean:devJs',
+    'clean:prodJs',
     'browserify',
-    'copy-dev',
-    'useminPrepare',
-    'concat:generated',
-    'cssmin:generated',
-    'uglify:generated',
-    'filerev',
-    'usemin',
+    'uglify',
   ]);
+
+  grunt.registerTask('build-prod', [
+    'build-prod-js',
+    'rev-prod',
+  ]);
+ 
+//   grunt.registerTask('tdd', [
+//     'clean',
+//     'copy-dev',
+//     'express:dev',
+//     'karma:unit'
+//   ]);
+
+//   grunt.registerTask('build-js', [
+//     'clean:js',
+//     'browserify',
+//     'copy:devJs',
+//     'useminPrepare',
+//     'uglify:generated',
+//     'filerev:js',
+//     'usemin',
+//   ]);
+  
+//   grunt.registerTask('build', [
+//     'clean',
+//     'browserify',
+//     'copy-dev',
+//     'useminPrepare',
+//     'concat:generated',
+//     'cssmin:generated',
+//     'uglify:generated',
+//     'filerev',
+//     'usemin',
+//   ]);
 
 
   grunt.registerTask('default', ['tdd']);

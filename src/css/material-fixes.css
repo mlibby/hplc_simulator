@@ -79,3 +79,8 @@ md-whiteframe {
 .md-sidenav-right {
   position: fixed;
 }
+
+md-radio-button .md-on {
+  top: 2px;
+  left: 2px;
+}
