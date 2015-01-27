@@ -163,4 +163,8 @@ describe('HPLC.Simulator', function() {
     simulator.elutionMode = HPLC.elutionModes.gradient;
     expect(simulator.compounds[0].sigma).toBeAround(1.0092);
   });
+
+  it('can calculate molecular weight (in pmol) for a compound', function () {
+    expect(simulator.compounds[0].w).toBeAround(0.000025);
+  });
 });

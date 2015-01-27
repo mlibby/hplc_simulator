@@ -145,6 +145,7 @@ var kPrime = function (simulator, compound) {
   }
 };
 
+/* units: seconds */
 var tR = function (simulator, compound) {
   return simulator.voidTime * (1 + compound.kPrime);
 };
@@ -170,8 +171,9 @@ var sigma = function (simulator, compound) {
         // // convert to s^2
 // double dTubingTimeBroadening = Math.pow((Math.sqrt(dTubingVolumeBroadening) / m_dFlowRate) * 60, 2);
 
+/* units: moles */
 var w = function (simulator, compound) {
-  return 0;
+  return (simulator.injectionVolume / 1000000) * compound.concentration;;
 };
 
 var associationParameter = function (simulator) {
