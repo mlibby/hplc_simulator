@@ -68,6 +68,20 @@ module.exports = function(grunt) {
       },
     },
 
+    cssMin: {
+      options: {
+      }
+    },
+
+    express: {
+      dev: {
+        options: {
+          script: 'server/server.js',
+          port: 5000
+        }
+      }
+    },
+    
     filerev: {
       options: {
         algorithm: 'md5',
@@ -81,6 +95,17 @@ module.exports = function(grunt) {
       }
     },
     
+    jasmine: {
+      hplc: {
+        src: 'dist/dev/js/hplc.js',
+        options: {
+          vendor: 'dist/dev/js/libs.js',
+          specs: 'spec/*_spec.js',
+          helpers: 'spec/helpers/*.js'
+        }
+      }
+    },
+    
     uglify: {
       options: {
         mangle: false,
@@ -90,11 +115,6 @@ module.exports = function(grunt) {
       js: {
         src: 'dist/dev/js/hplc.js',
         dest: 'dist/prod/js/hplc.js'
-      }
-    },
-    
-    cssMin: {
-      options: {
       }
     },
     
@@ -133,14 +153,6 @@ module.exports = function(grunt) {
       },
     },
 
-    express: {
-      dev: {
-        options: {
-          script: 'server/server.js',
-          port: 5000
-        }
-      }
-    },
   });
 
   grunt.loadNpmTasks('grunt-browserify');
@@ -152,6 +164,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-filerev');
   grunt.loadNpmTasks('grunt-express-server');
+  grunt.loadNpmTasks('grunt-contrib-jasmine');
 
   grunt.registerTask('use-rev', "replace css/js file references with revved file names", function () {
     grunt.verbose.writeln('summary = ' + grunt.filerev.summary);
@@ -194,7 +207,7 @@ module.exports = function(grunt) {
     'build-prod-js',
     'rev-prod',
   ]);
- 
+  
 //   grunt.registerTask('tdd', [
 //     'clean',
 //     'copy-dev',

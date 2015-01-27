@@ -27,6 +27,7 @@
     "npm": "2.2.x"
   },
   "devDependencies": {
+    "grunt-contrib-jasmine": "^0.8.2",
     "grunt-express-server": "^0.4.19",
     "grunt-karma": "^0.9.0",
     "karma": "^0.12.24",
