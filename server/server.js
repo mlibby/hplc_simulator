@@ -6,7 +6,7 @@ var app = express();
 
 app.set('port', (process.env.PORT || 5000));
 
-var mode = process.env.MODE || 'prod';
+var mode = process.env.NODE_ENV || 'prod';
 var prefix = 'dist/' + mode + '/';
 app.set('views', prefix + 'html');
 app.engine('html', ejs.renderFile);

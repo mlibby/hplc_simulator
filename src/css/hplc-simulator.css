@@ -58,8 +58,23 @@ table th {
   vertical-align: bottom;
 }
 
-.line {
-  stroke: black;
+#chart {
+  margin: 16px;
+}
+
+#chart .axis {
+  stroke-width: 1px;
+  stroke: #303030;
+  fill: none;
+}
+
+#chart .axis text {
+  fill: #303030;
+}
+
+#chart .line {
+  stroke: #303030;
   stroke-width: 1.5px;
   fill: none;
 }
+
