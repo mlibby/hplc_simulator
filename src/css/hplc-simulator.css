@@ -60,16 +60,18 @@ table th {
 
 #chart {
   margin: 16px;
+  width: 100%;
 }
 
 #chart .axis {
   stroke-width: 1px;
-  stroke: #303030;
+  stroke: #808080;
   fill: none;
 }
 
 #chart .axis text {
-  fill: #303030;
+  fill: #808080;
+  font-size: 0.6em;
 }
 
 #chart .line {

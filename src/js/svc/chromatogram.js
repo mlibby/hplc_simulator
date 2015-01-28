@@ -10,10 +10,14 @@ function Chromatogram() {
   selector = a css selector for the chart "container"
 */
 Chromatogram.prototype.draw = function (simulator, selector) {
-  var svgWidth = 844;
+
+  var chartContainer = d3.select(selector);
+  chartContainer.select('*').remove();
+  
+  var svgWidth = chartContainer.style("width").replace(/\D/g, '') - 16;
   var svgHeight = svgWidth / 1.78;
   
-  var margin = {top: 20, right: 40, bottom: 50, left: 20},
+  var margin = {top: 20, right: 40, bottom: 30, left: 20},
   width = svgWidth - margin.left - margin.right;
   height = svgHeight - margin.top - margin.bottom;
   
@@ -35,7 +39,7 @@ Chromatogram.prototype.draw = function (simulator, selector) {
     .x(function(d) { return x(d[0]); })
     .y(function(d) { return y(d[1]); });
   
-  var svg = d3.select(selector).append("svg")
+  var svg = chartContainer.append("svg")
     .attr("width", svgWidth)
     .attr("height", svgHeight)
     .append("g")

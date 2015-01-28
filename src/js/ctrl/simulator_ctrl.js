@@ -2,12 +2,16 @@ var HPLC = require("../model/hplc").hplc;
 
 angular
   .module('hplcSimulator')
-  .controller('SimulatorCtrl', [ 'chromatogram', SimulatorCtrl ]);
+  .controller('SimulatorCtrl', [ '$window', 'chromatogram', SimulatorCtrl ]);
 
-function SimulatorCtrl(chromatogram) {
+function SimulatorCtrl($window, chromatogram) {
   this.simulator = new HPLC.Simulator();
   this.selectedTab = 0;
   chromatogram.draw(this.simulator, '#chart');
+
+  angular.element($window).bind("resize", function () {
+    chromatogram.draw(this.simulator, '#chart');
+  });
 };
 
 SimulatorCtrl.prototype.primarySolvents = function() {
