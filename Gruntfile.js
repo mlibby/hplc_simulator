@@ -66,6 +66,34 @@ module.exports = function(grunt) {
         src: 'fonts',
         dest: 'dist/dev/css/'
       },
+      prodCss: {
+        flatten: true,
+        expand: true,
+        cwd: 'dist/dev/css',
+        src: '*.css',
+        dest: 'dist/prod/css/'
+      },
+      prodFonts: {
+        flatten: true,
+        expand: true,
+        cwd: 'dist/dev/css/fonts',
+        src: '*',
+        dest: 'dist/prod/css/fonts'
+      },
+      prodHtml: {
+        flatten: true,
+        expand: true,
+        cwd: 'dist/dev/html',
+        src: '*.html',
+        dest: 'dist/prod/html/'
+      },
+      prodJsLibs: {
+        flatten: true,
+        expand: true,
+        cwd: 'dist/dev/js',
+        src: 'libs.js',
+        dest: 'dist/prod/js/'
+      }
     },
 
     cssMin: {
@@ -87,11 +115,8 @@ module.exports = function(grunt) {
         algorithm: 'md5',
         length: 8
       },
-      js: {
-        src: 'dist/prod/js/*.js',
-      },
-      css: {
-        src: 'dist/prod/css/*.css',
+      prod: {
+        src: 'dist/prod/**/*.*',
       }
     },
 
@@ -104,6 +129,17 @@ module.exports = function(grunt) {
           helpers: 'spec/helpers/*.js'
         }
       }
+    },
+
+    ngtemplates: {
+      hplcSimulator: {
+        cwd: 'src/html/tmpl',
+        src: '*.html',
+        dest: 'dist/prod/js/templates.js',
+        options: {
+          prefix: '/html/',
+        },
+      },
     },
 
     uglify: {
@@ -155,6 +191,7 @@ module.exports = function(grunt) {
 
   });
 
+  grunt.loadNpmTasks('grunt-angular-templates');
   grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-concat');
@@ -167,10 +204,26 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jasmine');
 
   grunt.registerTask('use-rev', "replace css/js file references with revved file names", function () {
-    grunt.verbose.writeln('summary = ' + grunt.filerev.summary);
-    for(var f in grunt.filerev.summary) {
-      grunt.log.writeln(f);
+    var indexFiles = grunt.file.expand("dist/prod/html/index.*.html");
+    var index = grunt.file.read(indexFiles[0]);
+    
+    var jsLinks = index.match(/js\/.+\.js/gi);
+    for(var x in jsLinks) {
+      var js = jsLinks[x];
+      var revJs = grunt.filerev.summary['dist/prod/' + js].match(/js\/.+\.js/)[0];
+      index = index.replace(js, revJs);
+      grunt.verbose.writeln(js + " => " + revJs);
     }
+
+    var cssLinks = index.match(/css\/.+\.css/gi);
+    for(var x in cssLinks) {
+      var css = cssLinks[x];
+      var revCss = grunt.filerev.summary['dist/prod/' + css].match(/css\/.+\.css/)[0];
+      index = index.replace(css, revCss);
+      grunt.verbose.writeln(css + " => " + revCss);
+    }
+
+    grunt.file.write(indexFiles[0], index);
   });
 
   grunt.registerTask('rev-prod', ['filerev', 'use-rev']);
@@ -201,41 +254,26 @@ module.exports = function(grunt) {
     'clean:prodJs',
     'browserify',
     'uglify',
+    'copy:prodJsLibs'
   ]);
-
+  
   grunt.registerTask('build-prod', [
+    'build-dev',
     'build-prod-js',
+    'clean:prodCss',
+    'copy:prodCss',
+    'copy:prodFonts',
+    'clean:prodHtml',
+    'copy:prodHtml',
+    'ngtemplates',
     'rev-prod',
   ]);
-
-    grunt.registerTask('tdd', [
-      'build-dev',
-      'express:dev',
-      'watch',
-    ]);
-
-  //   grunt.registerTask('build-js', [
-  //     'clean:js',
-  //     'browserify',
-  //     'copy:devJs',
-  //     'useminPrepare',
-  //     'uglify:generated',
-  //     'filerev:js',
-  //     'usemin',
-  //   ]);
-
-  //   grunt.registerTask('build', [
-  //     'clean',
-  //     'browserify',
-  //     'copy-dev',
-  //     'useminPrepare',
-  //     'concat:generated',
-  //     'cssmin:generated',
-  //     'uglify:generated',
-  //     'filerev',
-  //     'usemin',
-  //   ]);
-
-
+  
+  grunt.registerTask('tdd', [
+    'build-dev',
+    'express:dev',
+    'watch',
+  ]);
+  
   grunt.registerTask('default', ['tdd']);
 };
