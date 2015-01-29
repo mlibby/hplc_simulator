@@ -93,7 +93,6 @@ describe('HPLC.Simulator', function() {
     expect(simulator.signalOffset).toBe(0);
     expect(simulator.noise).toBe(2.0);
     expect(simulator.initialTime).toBe(0);
-    expect(simulator.finalTime).toBe(0);
     expect(simulator.autoTimeSpan).toBe(true);
     expect(simulator.plotPoints).toBe(3000);
   });
@@ -104,6 +103,10 @@ describe('HPLC.Simulator', function() {
 
   it('calculates diffusion coefficient in cm^2/sec', function () {
     expect(simulator.diffusionCoefficient).toBeAround(0.000012233271);
+  });
+
+  it('calculates the final time with autotime is on', function () {
+    expect(simulator.finalTime).toBeAround(212.7274807);
   });
 
   /* Column Properties */

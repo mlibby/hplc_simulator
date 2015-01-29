@@ -22,18 +22,25 @@ Chromatogram.prototype.draw = function (simulator, selector) {
   height = svgHeight - margin.top - margin.bottom;
   
   var data = [];
-  for(var i = 1; i <= width; i++) {
-    //data.push( [i/width, 1/Math.sqrt(i/3)] );
-    data.push( [i/width, Math.sqrt(1/i)] );
+  for(var i = simulator.initialTime; i < simulator.finalTime; i++) {
+    data.push( [i, i/simulator.finalTime] );
   }
   
-  var x = d3.scale.linear().domain([0, 1]).range([0, width]);
+  var x = d3.scale.linear()
+    .domain([simulator.initialTime, simulator.finalTime])
+    .range([0, width]);
   
-  var y = d3.scale.linear().domain([1, 0]).range([0, height]);
+  var y = d3.scale.linear()
+    .domain([1, 0])
+    .range([0, height]);
   
-  var xAxis = d3.svg.axis().scale(x).orient("bottom");
+  var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
   
-  var yAxis = d3.svg.axis().scale(y).orient("left");
+  var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left");
   
   var line = d3.svg.line()
     .x(function(d) { return x(d[0]); })
@@ -48,13 +55,15 @@ Chromatogram.prototype.draw = function (simulator, selector) {
   svg.append("g")
     .attr("class", "x axis")
     .attr("transform", "translate(" + margin.left + "," + height + ")")
-    .call(xAxis);
-
+    .call(xAxis)
+    .append("text")
+    .text("time (seconds)")
+  ;
   svg.append("g")
     .attr("class", "y axis")
     .attr("transform", "translate(" + margin.left + "," + 0 + ")")
-    .call(yAxis);
-
+    .call(yAxis)
+  ;
   svg.append("path")
     .datum(data)
     .attr("class", "line")

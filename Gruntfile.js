@@ -188,6 +188,11 @@ module.exports = function(grunt) {
         files: 'bower_components/**/*.js}',
         tasks: ['build-dev-js-libs', 'jasmine']
       },
+
+      spec: {
+        files: 'spec/**/*.js',
+        tasks: ['jasmine']
+      },
     },
 
   });

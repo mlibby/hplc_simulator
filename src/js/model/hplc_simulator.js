@@ -11,10 +11,7 @@ function Simulator() {
     autoTimeSpan: true,
 
     elutionMode: HPLC.elutionModes.isocratic,
-
-    /* seconds */
-    finalTime: 0,
-
+    
     /* mL/min */
     flowRate: 2.0,
 
@@ -103,6 +100,18 @@ function Simulator() {
     get: function() { return this.backpressure / 100000; }
   });
 
+  /* seconds */
+  inputs.finalTime = 0;
+  Object.defineProperty(this, 'finalTime', {
+    get: function() { return inputs.finalTime; },
+    set: function(value) {
+      inputs.finalTime = value;
+      if(this.autoTimeSpan !== true) {
+        this.update();
+      } 
+    }
+  });
+
   this.update();
 };
 
@@ -123,6 +132,10 @@ Simulator.prototype.update = function () {
   this.dwellTime = dwellTime(this);
 
   this.updateCompounds();
+
+  if(this.autoTimeSpan) {
+    this.finalTime = finalTime(this);
+  }
 };
 
 Simulator.prototype.updateCompounds = function () {
@@ -256,6 +269,11 @@ var eluentViscosity = function (simulator) {
   var param = simulator.secondarySolvent.eluentViscosityParameters;
   var k = kelvin(simulator.temperature);
   return Math.exp((fraction * (param.a + (param.b / k))) + ((1 - fraction) * (param.c + (param.d / k))) + (fraction * (1 - fraction) * (param.e + (param.f / k))));
+};
+
+var finalTime = function (simulator) {
+  var maxTr = Math.max.apply(null, simulator.compounds.map(function(x) {return x.tR;}));
+  return maxTr * 1.1;
 };
 
 var hetp = function (simulator) {
