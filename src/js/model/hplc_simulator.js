@@ -117,35 +117,48 @@ function Simulator() {
 };
 
 Simulator.prototype.update = function () {
-  this.postTubingVolume = f.postTubingVolume(this);
-  this.voidTime = f.voidTime(this);
-  this.openTubeFlowVelocity = f.openTubeFlowVelocity(this);
-  this.chromatographicFlowVelocity = f.chromatographicFlowVelocity(this);
-  this.interstitialFlowVelocity = f.interstitialFlowVelocity(this);
-  this.eluentViscosity = f.eluentViscosity(this);
-  this.diffusionCoefficient = f.diffusionCoefficient(this);
-  this.reducedFlowVelocity = f.reducedFlowVelocity(this);
-  this.reducedPlateHeight = f.reducedPlateHeight(this);
-  this.backpressure = f.backpressure(this);
-  this.hetp = f.hetp(this);
-  this.theoreticalPlates = f.theoreticalPlates(this);
-  this.dwellVolume = f.dwellVolume(this);
-  this.dwellTime = f.dwellTime(this);
+  this.postTubingVolume = f.postTubingVolume(this.postTubingLength, this.postTubingDiameter);
+
+  this.voidTime = f.voidTime(this.voidVolume, this.flowRate);
+
+  this.openTubeFlowVelocity = f.openTubeFlowVelocity(this.flowRate, this.column.area);
+
+  this.chromatographicFlowVelocity = f.chromatographicFlowVelocity(this.openTubeFlowVelocity, this.column.totalPorosity);
+
+  this.interstitialFlowVelocity = f.interstitialFlowVelocity(this.openTubeFlowVelocity, this.column.interparticlePorosity);
+
+  this.eluentViscosity = f.eluentViscosity(this.solventFraction, this.secondarySolvent.eluentViscosityParameters);
+
+  this.diffusionCoefficient = f.diffusionCoefficient(this.solventFraction, this.secondarySolvent.molecularWeight, this.temperature, this.eluentViscosity, this.compounds);
+
+  this.reducedFlowVelocity = f.reducedFlowVelocity(this.column.particleSize, this.interstitialFlowVelocity, this.diffusionCoefficient);
+
+  this.reducedPlateHeight = f.reducedPlateHeight(this.column.vanDeemterA, this.column.vanDeemterB, this.column.vanDeemterC, this.reducedFlowVelocity);
+
+  this.backpressure = f.backpressure(this.openTubeFlowVelocity, this.column, this.eluentViscosity);
+
+  this.hetp = f.hetp(this.column.particleSize, this.reducedPlateHeight);
+
+  this.theoreticalPlates = f.theoreticalPlates(this.column.length, this.hetp);
+
+  this.dwellVolume = f.dwellVolume(this.mixingVolume, this.nonMixingVolume);
+
+  this.dwellTime = f.dwellTime(this.dwellVolume, this.flowRate);
 
   this.updateCompounds();
 
   if(this.autoTimeSpan) {
-    this.finalTime = f.finalTime(this);
+    this.finalTime = f.finalTime(this.compounds);
   }
 };
 
 Simulator.prototype.updateCompounds = function () {
   for(var i = 0; i < this.compounds.length; i++) {
     var compound = this.compounds[i];
-    compound.kPrime = f.kPrime(this, compound);
-    compound.tR = f.tR(this, compound);
-    compound.sigma = f.sigma(this, compound);
-    compound.w = f.w(this, compound);
+    compound.kPrime = f.kPrime(this.elutionMode, this.temperature, this.solventFraction, compound);
+    compound.tR = f.tR(this.voidTime, compound);
+    compound.sigma = f.sigma(compound, this.theoreticalPlates, this.timeConstant, this.injectionVolume, this.flowRate);
+    compound.w = f.w(this.injectionVolume, compound);
   }
 };
 

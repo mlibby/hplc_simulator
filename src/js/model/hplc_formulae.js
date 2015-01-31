@@ -2,17 +2,89 @@
 
 var HPLC = require("./hplc_globals.js").globals;
 
-var associationParameter = function (simulator) {
+var f = exports.formulae = {};
+
+f.associationParameter = function (solventFraction) {
   // return ((1 - simulator.solventFraction) * (2.6 - 1.9)) + 1.9;
-  return ((1 - simulator.solventFraction) * 0.7) + 1.9;
+  return ((1 - solventFraction) * 0.7) + 1.9;
 };
 
-var averageMolarVolume = function (simulator) {
+f.averageMolarVolume = function (compounds) {
   var averageMolarVolume = 0;
-  for (var i in simulator.compounds) {
-    averageMolarVolume += simulator.compounds[i].molarVolume;
+  for (var i in compounds) {
+    averageMolarVolume += compounds[i].molarVolume;
   }
-  return averageMolarVolume /= simulator.compounds.length;
+  return averageMolarVolume /= compounds.length;
+};
+
+
+f.kelvin = function (celsius) {
+  return celsius + 273.15;
+};
+
+f.solventMolecularWeight= function (solventFraction, secondarySolventWeight) {
+  return (solventFraction * (secondarySolventWeight - 18)) + 18;
+};
+
+f.kPrime = function (elutionMode, temperature, solventFraction, compound) {
+  if(elutionMode === HPLC.elutionModes.gradient) {
+    return NaN;
+  } else {
+    var logkprimew1 = compound.km * temperature + compound.kb;
+    var s1 = -1 * ((compound.sm * temperature) + compound.sb);
+    return Math.pow(10, logkprimew1 - (s1 * solventFraction));
+  }
+};
+
+/* units: seconds */
+f.tR = function (voidTime, compound) {
+  return voidTime * (1 + compound.kPrime);
+};
+
+f.sigma = function (compound, theoreticalPlates, timeConstant, injectionVolume, flowRate) {
+  var term1 = Math.pow(compound.tR / Math.sqrt(theoreticalPlates), 2);
+  var term2 = Math.pow(timeConstant, 2);
+  var term3 = Math.pow((injectionVolume / 1000.0) / (flowRate / 60.0), 2);
+  var figure = term1 + term2 + (1.0/12.0) * term3;
+
+  return Math.sqrt(figure); // + dTubingTimeBroadening
+};
+
+// // Calculate dispersion that will result from extra-column tubing
+// // in cm^2
+// double dTubingZBroadening = (2 * m_dDiffusionCoefficient * this.m_dTubingLength / dTubingOpenTubeVelocity) + ((Math.pow(dTubingRadius, 2) * m_dTubingLength * dTubingOpenTubeVelocity) / (24 * m_dDiffusionCoefficient));
+
+// // convert to mL^2
+// double dTubingVolumeBroadening = Math.pow(Math.sqrt(dTubingZBroadening) * Math.PI * Math.pow(dTubingRadius, 2), 2);
+
+// // convert to s^2
+// double dTubingTimeBroadening = Math.pow((Math.sqrt(dTubingVolumeBroadening) / m_dFlowRate) * 60, 2);
+
+/* units: moles */
+f.w = function (injectionVolume, compound) {
+  return (injectionVolume / 1000000) * compound.concentration;;
+};
+
+/*
+  Calculate backpressure (in pascals) (Darcy equation)
+  See Thompson, J. D.; Carr, P. W. Anal. Chem. 2002, 74, 4150-4159.
+  Backpressure in units of Pa
+*/
+f.backpressure = function (openTubeFlowVelocity, column, eluentViscosity) {
+  var velocity = openTubeFlowVelocity / 100;
+  var length = column.length / 1000;
+  var viscosity = eluentViscosity / 1000;
+  var porosity = column.interparticlePorosity;
+  var particleSize = column.particleSize / 1000000;
+
+  var numerator = velocity * length * viscosity * 180 * Math.pow(1 - porosity, 2);
+  var denominator = Math.pow(porosity, 3) * Math.pow(particleSize, 2);
+
+  return numerator / denominator;
+};
+
+f.chromatographicFlowVelocity = function (openTubeFlowVelocity, totalPorosity) {
+  return openTubeFlowVelocity / totalPorosity;
 };
 
 /*
@@ -22,161 +94,86 @@ var averageMolarVolume = function (simulator) {
 
   http://onlinelibrary.wiley.com/doi/10.1002/aic.690010222/pdf
 */
-var diffusionCoefficient = function (simulator) {
-  var x = associationParameter(simulator);
-  var M = solventMolecularWeight(simulator);
-  var T = kelvin(simulator.temperature);
-  var n = simulator.eluentViscosity;
-  var v = averageMolarVolume(simulator);
+f.diffusionCoefficient = function (solventFraction, secondarySolventWeight, temperature, eluentViscosity, compounds) {
+  var x = f.associationParameter(solventFraction);
+  var M = f.solventMolecularWeight(solventFraction, secondarySolventWeight);
+  var T = f.kelvin(temperature);
+  var n = eluentViscosity;
+  var v = f.averageMolarVolume(compounds);
 
   var numer = Math.pow(x * M, 0.5) * T;
   var denom = n * Math.pow(v, 0.6);
   return 7.4e-8 * (numer / denom);
 };
 
-var kelvin = function (temperature) {
-  return temperature + 273.15;
+/* units: minutes */
+f.dwellTime = function (dwellVolume, flowRate) {
+  return (dwellVolume / 1000) / flowRate;
 };
 
-var solventMolecularWeight= function (simulator) {
-  return (simulator.solventFraction * (simulator.secondarySolvent.molecularWeight - 18)) + 18;
+/* units: uL */
+f.dwellVolume = function (mixingVolume, nonMixingVolume) {
+  return mixingVolume + nonMixingVolume;
 };
 
-exports.formulae = {
-  kPrime: function (simulator, compound) {
-    if(simulator.elutionMode === HPLC.elutionModes.gradient) {
-      return NaN;
-    } else {
-      var logkprimew1 = compound.km * simulator.temperature + compound.kb;
-      var s1 = -1 * ((compound.sm * simulator.temperature) + compound.sb);
-      return Math.pow(10, logkprimew1 - (s1 * simulator.solventFraction));
-    }
-  },
+/*
+  This formula is for acetonitrile/water mixtures:
+  See Chen, H.; Horvath, C. Analytical Methods and Instrumentation. 1993, 1, 213-222.
+  http://www.speciation.net/Database/Journals/Analytical-Methods-and-Instrumentation-;i289
 
-  /* units: seconds */
-  tR: function (simulator, compound) {
-    return simulator.voidTime * (1 + compound.kPrime);
-  },
+  This formula is for methanol/water mixtures:
+  Based on fit of data (at 1 bar) in Journal of Chromatography A, 1210 (2008) 30-44.
 
-  sigma: function (simulator, compound) {
-    var term1 = Math.pow(compound.tR / Math.sqrt(simulator.theoreticalPlates), 2);
-    var term2 = Math.pow(simulator.timeConstant, 2);
-    var term3 = Math.pow((simulator.injectionVolume / 1000.0) / (simulator.flowRate / 60.0), 2);
-    var figure = term1 + term2 + (1.0/12.0) * term3;
+  The formula is the same in both mixtures, but input values vary.
+*/
 
-    var sigma = Math.sqrt(figure); // + dTubingTimeBroadening
+f.eluentViscosity = function (solventFraction, eluentViscosityParameters, temperature) {
+  var fraction = solventFraction;
+  var param = eluentViscosityParameters;
+  var k = f.kelvin(temperature);
+  return Math.exp((fraction * (param.a + (param.b / k))) + ((1 - fraction) * (param.c + (param.d / k))) + (fraction * (1 - fraction) * (param.e + (param.f / k))));
+};
 
-    return sigma;
-  },
+f.finalTime = function (compounds) {
+  var maxTr = Math.max.apply(null, compounds.map(function(x) {return x.tR;}));
+  return maxTr * 1.1;
+};
 
-  // // Calculate dispersion that will result from extra-column tubing
-  // // in cm^2
-  // double dTubingZBroadening = (2 * m_dDiffusionCoefficient * this.m_dTubingLength / dTubingOpenTubeVelocity) + ((Math.pow(dTubingRadius, 2) * m_dTubingLength * dTubingOpenTubeVelocity) / (24 * m_dDiffusionCoefficient));
+f.hetp = function (particleSize, reducedPlateHeight) {
+  return particleSize / 10000 * reducedPlateHeight;
+};
 
-  // // convert to mL^2
-  // double dTubingVolumeBroadening = Math.pow(Math.sqrt(dTubingZBroadening) * Math.PI * Math.pow(dTubingRadius, 2), 2);
+f.interstitialFlowVelocity = function (openTubeFlowVelocity, interparticlePorosity) {
+  return openTubeFlowVelocity / interparticlePorosity;
+};
 
-  // // convert to s^2
-  // double dTubingTimeBroadening = Math.pow((Math.sqrt(dTubingVolumeBroadening) / m_dFlowRate) * 60, 2);
+/* units: cm/sec */
+f.openTubeFlowVelocity = function (flowRate, area) {
+  return (flowRate / 60) / area * 100;
+};
 
-  /* units: moles */
-  w: function (simulator, compound) {
-    return (simulator.injectionVolume / 1000000) * compound.concentration;;
-  },
+f.postTubingVolume = function (postTubingLength, postTubingDiameter) {
+  var length = postTubingLength / 100;
+  var radius = (postTubingDiameter * 2.54e-5) / 2;
+  var area = Math.PI * Math.pow(radius, 2);
 
-  /*
-    Calculate backpressure (in pascals) (Darcy equation)
-    See Thompson, J. D.; Carr, P. W. Anal. Chem. 2002, 74, 4150-4159.
-    Backpressure in units of Pa
-  */
-  backpressure: function (simulator) {
-    var velocity = simulator.openTubeFlowVelocity / 100;
-    var length = simulator.column.length / 1000;
-    var viscosity = simulator.eluentViscosity / 1000;
-    var porosity = simulator.column.interparticlePorosity;
-    var particleSize = simulator.column.particleSize / 1000000;
+  return length * (area * 1e9);
+};
 
-    var numerator = velocity * length * viscosity * 180 * Math.pow(1 - porosity, 2);
-    var denominator = Math.pow(porosity, 3) * Math.pow(particleSize, 2);
+f.reducedFlowVelocity = function (particleSize, interstitialFlowVelocity, diffusionCoefficient) {
+  return ((particleSize / 10000) * interstitialFlowVelocity) / diffusionCoefficient;
+};
 
-    return numerator / denominator;
-  },
+/* Van Deemter A, B, C */
+f.reducedPlateHeight = function (a, b, c, reducedFlowVelocity) {
+  return a + (b / reducedFlowVelocity) + (c * reducedFlowVelocity);
+};
 
-  chromatographicFlowVelocity: function (simulator) {
-    return simulator.openTubeFlowVelocity / simulator.column.totalPorosity;
-  },
+f.theoreticalPlates = function (length, hetp) {
+  return length / 10 / hetp;
+};
 
-  diffusionCoefficient: diffusionCoefficient,
-
-  /* units: minutes */
-  dwellTime: function (simulator) {
-    return (simulator.dwellVolume / 1000) / simulator.flowRate;
-  },
-
-  /* units: uL */
-  dwellVolume: function (simulator) {
-    return simulator.mixingVolume + simulator.nonMixingVolume;
-  },
-
-  /*
-    This formula is for acetonitrile/water mixtures:
-    See Chen, H.; Horvath, C. Analytical Methods and Instrumentation. 1993, 1, 213-222.
-    http://www.speciation.net/Database/Journals/Analytical-Methods-and-Instrumentation-;i289
-
-    This formula is for methanol/water mixtures:
-    Based on fit of data (at 1 bar) in Journal of Chromatography A, 1210 (2008) 30-44.
-
-    The formula is the same in both mixtures, but input values vary.
-  */
-
-  eluentViscosity: function (simulator) {
-    var fraction = simulator.solventFraction;
-    var param = simulator.secondarySolvent.eluentViscosityParameters;
-    var k = kelvin(simulator.temperature);
-    return Math.exp((fraction * (param.a + (param.b / k))) + ((1 - fraction) * (param.c + (param.d / k))) + (fraction * (1 - fraction) * (param.e + (param.f / k))));
-  },
-
-  finalTime: function (simulator) {
-    var maxTr = Math.max.apply(null, simulator.compounds.map(function(x) {return x.tR;}));
-    return maxTr * 1.1;
-  },
-
-  hetp: function (simulator) {
-    return simulator.column.particleSize / 10000 * simulator.reducedPlateHeight;
-  },
-
-  interstitialFlowVelocity: function (simulator) {
-    return simulator.openTubeFlowVelocity / simulator.column.interparticlePorosity;
-  },
-
-  /* units: cm/sec */
-  openTubeFlowVelocity: function (simulator) {
-    return (simulator.flowRate / 60) / simulator.column.area * 100;
-  },
-
-  postTubingVolume: function (simulator) {
-    var length = simulator.postTubingLength / 100;
-    var radius = (simulator.postTubingDiameter * 2.54e-5) / 2;
-    var area = Math.PI * Math.pow(radius, 2);
-
-    return length * (area * 1e9);
-  },
-
-  reducedFlowVelocity: function (simulator) {
-    return ((simulator.column.particleSize / 10000) * simulator.interstitialFlowVelocity) / diffusionCoefficient(simulator);
-  },
-
-  reducedPlateHeight: function (simulator) {
-    var column = simulator.column;
-    return column.vanDeemterA + (column.vanDeemterB / simulator.reducedFlowVelocity) + (column.vanDeemterC * simulator.reducedFlowVelocity);
-  },
-
-  theoreticalPlates: function (simulator) {
-    return simulator.column.length / 10 / simulator.hetp;
-  },
-
-  /* units: seconds */
-  voidTime: function (simulator) {
-    return simulator.column.voidVolume / simulator.flowRate * 60;
-  },
+/* units: seconds */
+f.voidTime = function (voidVolume, flowRate) {
+  return voidVolume / flowRate * 60;
 };
