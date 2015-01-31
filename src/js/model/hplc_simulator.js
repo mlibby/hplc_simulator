@@ -119,7 +119,7 @@ function Simulator() {
 Simulator.prototype.update = function () {
   this.postTubingVolume = f.postTubingVolume(this.postTubingLength, this.postTubingDiameter);
 
-  this.voidTime = f.voidTime(this.voidVolume, this.flowRate);
+  this.voidTime = f.voidTime(this.column.voidVolume, this.flowRate);
 
   this.openTubeFlowVelocity = f.openTubeFlowVelocity(this.flowRate, this.column.area);
 
@@ -127,7 +127,7 @@ Simulator.prototype.update = function () {
 
   this.interstitialFlowVelocity = f.interstitialFlowVelocity(this.openTubeFlowVelocity, this.column.interparticlePorosity);
 
-  this.eluentViscosity = f.eluentViscosity(this.solventFraction, this.secondarySolvent.eluentViscosityParameters);
+  this.eluentViscosity = f.eluentViscosity(this.solventFraction, this.secondarySolvent.eluentViscosityParameters, this.temperature);
 
   this.diffusionCoefficient = f.diffusionCoefficient(this.solventFraction, this.secondarySolvent.molecularWeight, this.temperature, this.eluentViscosity, this.compounds);
 

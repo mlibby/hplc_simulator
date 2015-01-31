@@ -17,39 +17,6 @@ f.averageMolarVolume = function (compounds) {
   return averageMolarVolume /= compounds.length;
 };
 
-
-f.kelvin = function (celsius) {
-  return celsius + 273.15;
-};
-
-f.solventMolecularWeight= function (solventFraction, secondarySolventWeight) {
-  return (solventFraction * (secondarySolventWeight - 18)) + 18;
-};
-
-f.kPrime = function (elutionMode, temperature, solventFraction, compound) {
-  if(elutionMode === HPLC.elutionModes.gradient) {
-    return NaN;
-  } else {
-    var logkprimew1 = compound.km * temperature + compound.kb;
-    var s1 = -1 * ((compound.sm * temperature) + compound.sb);
-    return Math.pow(10, logkprimew1 - (s1 * solventFraction));
-  }
-};
-
-/* units: seconds */
-f.tR = function (voidTime, compound) {
-  return voidTime * (1 + compound.kPrime);
-};
-
-f.sigma = function (compound, theoreticalPlates, timeConstant, injectionVolume, flowRate) {
-  var term1 = Math.pow(compound.tR / Math.sqrt(theoreticalPlates), 2);
-  var term2 = Math.pow(timeConstant, 2);
-  var term3 = Math.pow((injectionVolume / 1000.0) / (flowRate / 60.0), 2);
-  var figure = term1 + term2 + (1.0/12.0) * term3;
-
-  return Math.sqrt(figure); // + dTubingTimeBroadening
-};
-
 // // Calculate dispersion that will result from extra-column tubing
 // // in cm^2
 // double dTubingZBroadening = (2 * m_dDiffusionCoefficient * this.m_dTubingLength / dTubingOpenTubeVelocity) + ((Math.pow(dTubingRadius, 2) * m_dTubingLength * dTubingOpenTubeVelocity) / (24 * m_dDiffusionCoefficient));
@@ -59,11 +26,6 @@ f.sigma = function (compound, theoreticalPlates, timeConstant, injectionVolume, 
 
 // // convert to s^2
 // double dTubingTimeBroadening = Math.pow((Math.sqrt(dTubingVolumeBroadening) / m_dFlowRate) * 60, 2);
-
-/* units: moles */
-f.w = function (injectionVolume, compound) {
-  return (injectionVolume / 1000000) * compound.concentration;;
-};
 
 /*
   Calculate backpressure (in pascals) (Darcy equation)
@@ -94,13 +56,15 @@ f.chromatographicFlowVelocity = function (openTubeFlowVelocity, totalPorosity) {
 
   http://onlinelibrary.wiley.com/doi/10.1002/aic.690010222/pdf
 */
-f.diffusionCoefficient = function (solventFraction, secondarySolventWeight, temperature, eluentViscosity, compounds) {
+f.diffusionCoefficient = function (solventFraction, solventMolecularWeight, temperature, eluentViscosity, compounds) {
   var x = f.associationParameter(solventFraction);
-  var M = f.solventMolecularWeight(solventFraction, secondarySolventWeight);
+  var M = f.solventMolecularWeight(solventFraction, solventMolecularWeight);
   var T = f.kelvin(temperature);
   var n = eluentViscosity;
   var v = f.averageMolarVolume(compounds);
 
+  // are any of these hard-coded values specific to primary
+  // solvent being water?
   var numer = Math.pow(x * M, 0.5) * T;
   var denom = n * Math.pow(v, 0.6);
   return 7.4e-8 * (numer / denom);
@@ -147,6 +111,20 @@ f.interstitialFlowVelocity = function (openTubeFlowVelocity, interparticlePorosi
   return openTubeFlowVelocity / interparticlePorosity;
 };
 
+f.kelvin = function (celsius) {
+  return celsius + 273.15;
+};
+
+f.kPrime = function (elutionMode, temperature, solventFraction, compound) {
+  if(elutionMode === HPLC.elutionModes.gradient) {
+    return NaN;
+  } else {
+    var logkprimew1 = compound.km * temperature + compound.kb;
+    var s1 = -1 * ((compound.sm * temperature) + compound.sb);
+    return Math.pow(10, logkprimew1 - (s1 * solventFraction));
+  }
+};
+
 /* units: cm/sec */
 f.openTubeFlowVelocity = function (flowRate, area) {
   return (flowRate / 60) / area * 100;
@@ -169,6 +147,24 @@ f.reducedPlateHeight = function (a, b, c, reducedFlowVelocity) {
   return a + (b / reducedFlowVelocity) + (c * reducedFlowVelocity);
 };
 
+f.sigma = function (compound, theoreticalPlates, timeConstant, injectionVolume, flowRate) {
+  var term1 = Math.pow(compound.tR / Math.sqrt(theoreticalPlates), 2);
+  var term2 = Math.pow(timeConstant, 2);
+  var term3 = Math.pow((injectionVolume / 1000.0) / (flowRate / 60.0), 2);
+  var figure = term1 + term2 + (1.0/12.0) * term3;
+
+  return Math.sqrt(figure); // + dTubingTimeBroadening
+};
+
+f.solventMolecularWeight= function (solventFraction, solventMolecularWeight) {
+  return (solventFraction * (solventMolecularWeight - 18)) + 18;
+};
+
+/* units: seconds */
+f.tR = function (voidTime, compound) {
+  return voidTime * (1 + compound.kPrime);
+};
+
 f.theoreticalPlates = function (length, hetp) {
   return length / 10 / hetp;
 };
@@ -176,4 +172,9 @@ f.theoreticalPlates = function (length, hetp) {
 /* units: seconds */
 f.voidTime = function (voidVolume, flowRate) {
   return voidVolume / flowRate * 60;
+};
+
+/* units: moles */
+f.w = function (injectionVolume, compound) {
+  return (injectionVolume / 1000000) * compound.concentration;;
 };
