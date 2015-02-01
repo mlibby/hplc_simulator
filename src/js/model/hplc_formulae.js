@@ -4,12 +4,12 @@ var HPLC = require("./hplc_globals.js").globals;
 
 var f = exports.formulae = {};
 
-f.associationParameter = function (solventFraction) {
+f.associationParameter = function _associationParameter (solventFraction) {
   // return ((1 - simulator.solventFraction) * (2.6 - 1.9)) + 1.9;
   return ((1 - solventFraction) * 0.7) + 1.9;
 };
 
-f.averageMolarVolume = function (compounds) {
+f.averageMolarVolume = function _averageMolarVolume (compounds) {
   var averageMolarVolume = 0;
   for (var i in compounds) {
     averageMolarVolume += compounds[i].molarVolume;
@@ -32,7 +32,7 @@ f.averageMolarVolume = function (compounds) {
   See Thompson, J. D.; Carr, P. W. Anal. Chem. 2002, 74, 4150-4159.
   Backpressure in units of Pa
 */
-f.backpressure = function (openTubeFlowVelocity, column, eluentViscosity) {
+f.backpressure = function _backpressure (openTubeFlowVelocity, column, eluentViscosity) {
   var velocity = openTubeFlowVelocity / 100;
   var length = column.length / 1000;
   var viscosity = eluentViscosity / 1000;
@@ -45,7 +45,7 @@ f.backpressure = function (openTubeFlowVelocity, column, eluentViscosity) {
   return numerator / denominator;
 };
 
-f.chromatographicFlowVelocity = function (openTubeFlowVelocity, totalPorosity) {
+f.chromatographicFlowVelocity = function _chromatographicFlowVelocity (openTubeFlowVelocity, totalPorosity) {
   return openTubeFlowVelocity / totalPorosity;
 };
 
@@ -56,7 +56,7 @@ f.chromatographicFlowVelocity = function (openTubeFlowVelocity, totalPorosity) {
 
   http://onlinelibrary.wiley.com/doi/10.1002/aic.690010222/pdf
 */
-f.diffusionCoefficient = function (solventFraction, solventMolecularWeight, temperature, eluentViscosity, compounds) {
+f.diffusionCoefficient = function _diffusionCoefficient(solventFraction, solventMolecularWeight, temperature, eluentViscosity, compounds) {
   var x = f.associationParameter(solventFraction);
   var M = f.solventMolecularWeight(solventFraction, solventMolecularWeight);
   var T = f.kelvin(temperature);
@@ -71,12 +71,12 @@ f.diffusionCoefficient = function (solventFraction, solventMolecularWeight, temp
 };
 
 /* units: minutes */
-f.dwellTime = function (dwellVolume, flowRate) {
+f.dwellTime = function _dwellTime (dwellVolume, flowRate) {
   return (dwellVolume / 1000) / flowRate;
 };
 
 /* units: uL */
-f.dwellVolume = function (mixingVolume, nonMixingVolume) {
+f.dwellVolume = function _dwellVolume (mixingVolume, nonMixingVolume) {
   return mixingVolume + nonMixingVolume;
 };
 
@@ -91,16 +91,11 @@ f.dwellVolume = function (mixingVolume, nonMixingVolume) {
   The formula is the same in both mixtures, but input values vary.
 */
 
-f.eluentViscosity = function (solventFraction, eluentViscosityParameters, temperature) {
+f.eluentViscosity = function _eluentViscosity (solventFraction, eluentViscosityParameters, temperature) {
   var fraction = solventFraction;
   var param = eluentViscosityParameters;
   var k = f.kelvin(temperature);
   return Math.exp((fraction * (param.a + (param.b / k))) + ((1 - fraction) * (param.c + (param.d / k))) + (fraction * (1 - fraction) * (param.e + (param.f / k))));
-};
-
-f.finalTime = function (compounds) {
-  var maxTr = Math.max.apply(null, compounds.map(function(x) {return x.tR;}));
-  return maxTr * 1.1;
 };
 
 f.hetp = function (particleSize, reducedPlateHeight) {
@@ -115,22 +110,26 @@ f.kelvin = function (celsius) {
   return celsius + 273.15;
 };
 
-f.kPrime = function (elutionMode, temperature, solventFraction, compound) {
+f.kPrime = function (elutionMode, temperature, solventFraction, km, kb, sm, sb) {
   if(elutionMode === HPLC.elutionModes.gradient) {
     return NaN;
   } else {
-    var logkprimew1 = compound.km * temperature + compound.kb;
-    var s1 = -1 * ((compound.sm * temperature) + compound.sb);
+    var logkprimew1 = km * temperature + kb;
+    var s1 = -1 * ((sm * temperature) + sb);
     return Math.pow(10, logkprimew1 - (s1 * solventFraction));
   }
 };
 
+f.maxRetentionTime = function _maxRetentionTime (compounds) {
+  return Math.max.apply(null, compounds.map(function(x) {return x.tR;}));
+};
+
 /* units: cm/sec */
-f.openTubeFlowVelocity = function (flowRate, area) {
+f.openTubeFlowVelocity = function _openTubeFlowVelocity(flowRate, area) {
   return (flowRate / 60) / area * 100;
 };
 
-f.postTubingVolume = function (postTubingLength, postTubingDiameter) {
+f.postTubingVolume = function _postTubingVolume (postTubingLength, postTubingDiameter) {
   var length = postTubingLength / 100;
   var radius = (postTubingDiameter * 2.54e-5) / 2;
   var area = Math.PI * Math.pow(radius, 2);
@@ -138,17 +137,17 @@ f.postTubingVolume = function (postTubingLength, postTubingDiameter) {
   return length * (area * 1e9);
 };
 
-f.reducedFlowVelocity = function (particleSize, interstitialFlowVelocity, diffusionCoefficient) {
+f.reducedFlowVelocity = function _reducedFlowVelocity (particleSize, interstitialFlowVelocity, diffusionCoefficient) {
   return ((particleSize / 10000) * interstitialFlowVelocity) / diffusionCoefficient;
 };
 
 /* Van Deemter A, B, C */
-f.reducedPlateHeight = function (a, b, c, reducedFlowVelocity) {
+f.reducedPlateHeight = function _reducedPlateHeight (a, b, c, reducedFlowVelocity) {
   return a + (b / reducedFlowVelocity) + (c * reducedFlowVelocity);
 };
 
-f.sigma = function (compound, theoreticalPlates, timeConstant, injectionVolume, flowRate) {
-  var term1 = Math.pow(compound.tR / Math.sqrt(theoreticalPlates), 2);
+f.sigma = function _sigma (tR, theoreticalPlates, timeConstant, injectionVolume, flowRate) {
+  var term1 = Math.pow(tR / Math.sqrt(theoreticalPlates), 2);
   var term2 = Math.pow(timeConstant, 2);
   var term3 = Math.pow((injectionVolume / 1000.0) / (flowRate / 60.0), 2);
   var figure = term1 + term2 + (1.0/12.0) * term3;
@@ -156,25 +155,25 @@ f.sigma = function (compound, theoreticalPlates, timeConstant, injectionVolume, 
   return Math.sqrt(figure); // + dTubingTimeBroadening
 };
 
-f.solventMolecularWeight= function (solventFraction, solventMolecularWeight) {
+f.solventMolecularWeight= function _solventMolecularWeight (solventFraction, solventMolecularWeight) {
   return (solventFraction * (solventMolecularWeight - 18)) + 18;
 };
 
 /* units: seconds */
-f.tR = function (voidTime, compound) {
-  return voidTime * (1 + compound.kPrime);
+f.tR = function _tR (voidTime, kPrime) {
+  return voidTime * (1 + kPrime);
 };
 
-f.theoreticalPlates = function (length, hetp) {
+f.theoreticalPlates = function _theoreticalPlates (length, hetp) {
   return length / 10 / hetp;
 };
 
 /* units: seconds */
-f.voidTime = function (voidVolume, flowRate) {
+f.voidTime = function _voidTime (voidVolume, flowRate) {
   return voidVolume / flowRate * 60;
 };
 
 /* units: moles */
-f.w = function (injectionVolume, compound) {
-  return (injectionVolume / 1000000) * compound.concentration;;
+f.w = function _w (injectionVolume, concentration) {
+  return (injectionVolume / 1000000) * concentration;;
 };

@@ -7,7 +7,9 @@ var f = require("./hplc_formulae.js").formulae;
 
 exports.Simulator = Simulator;
 
-function Simulator() {
+function Simulator (updateObserver) {
+  this.updateObserver = updateObserver || function () {};
+  
   var inputs = {
     autoTimeSpan: true,
 
@@ -116,7 +118,7 @@ function Simulator() {
   this.update();
 };
 
-Simulator.prototype.update = function () {
+Simulator.prototype.update = function _update () {
   this.postTubingVolume = f.postTubingVolume(this.postTubingLength, this.postTubingDiameter);
 
   this.voidTime = f.voidTime(this.column.voidVolume, this.flowRate);
@@ -148,17 +150,38 @@ Simulator.prototype.update = function () {
   this.updateCompounds();
 
   if(this.autoTimeSpan) {
-    this.finalTime = f.finalTime(this.compounds);
+    this.finalTime = f.maxRetentionTime(this.compounds) * 1.1;
   }
+
+  this.updateObserver(this);
 };
 
-Simulator.prototype.updateCompounds = function () {
+Simulator.prototype.updateCompounds = function _updateCompounds () {
   for(var i = 0; i < this.compounds.length; i++) {
     var compound = this.compounds[i];
-    compound.kPrime = f.kPrime(this.elutionMode, this.temperature, this.solventFraction, compound);
-    compound.tR = f.tR(this.voidTime, compound);
-    compound.sigma = f.sigma(compound, this.theoreticalPlates, this.timeConstant, this.injectionVolume, this.flowRate);
-    compound.w = f.w(this.injectionVolume, compound);
+    compound.kPrime = f.kPrime(this.elutionMode, this.temperature, this.solventFraction, compound.km, compound.kb, compound.sm, compound.sb);
+    compound.tR = f.tR(this.voidTime, compound.kPrime);
+    compound.sigma = f.sigma(compound.tR, this.theoreticalPlates, this.timeConstant, this.injectionVolume, this.flowRate);
+    compound.w = f.w(this.injectionVolume, compound.concentration);
   }
 };
 
+Simulator.prototype.getCompoundSeries = function _getCompoundSeries (compound) {
+  var series = [];
+  for(var i = this.initialTime; i < this.finalTime; i++) {
+    series.push( this.getCompoundSignal(i, compound) );
+  }
+  return series;
+};
+
+/* units: micromoles/liter */
+Simulator.prototype.getCompoundSignal = function _getCompoundSignal (time, compound) {
+  var w = compound.w;
+  var piRoot = Math.sqrt(2 * Math.PI);
+  var sigma = compound.sigma;
+  var flowRate = this.flowRate / 60000;
+  var timeFactor = -Math.pow(time - compound.tR, 2);
+  var sigmaFactor = 2 * Math.pow(compound.sigma, 2);
+  var signal = ((w / (piRoot * sigma * flowRate)) * Math.exp(timeFactor / sigmaFactor)) + this.signalOffset;
+  return signal;
+};

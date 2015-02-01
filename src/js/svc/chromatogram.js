@@ -10,6 +10,14 @@ function Chromatogram() {
   selector = a css selector for the chart "container"
 */
 Chromatogram.prototype.draw = function (simulator, selector) {
+  var dataSet = [];
+  for(var i = 0; i < simulator.compounds.length; i++) {
+    var compound = simulator.compounds[i];
+    dataSet.push({
+      label: compound.name,
+      values: simulator.getCompoundSeries(compound),
+    });
+  }
 
   var chartContainer = d3.select(selector);
   chartContainer.select('*').remove();
@@ -21,17 +29,12 @@ Chromatogram.prototype.draw = function (simulator, selector) {
   width = svgWidth - margin.left - margin.right;
   height = svgHeight - margin.top - margin.bottom;
   
-  var data = [];
-  for(var i = simulator.initialTime; i < simulator.finalTime; i++) {
-    data.push( [i, i/simulator.finalTime] );
-  }
-  
   var x = d3.scale.linear()
     .domain([simulator.initialTime, simulator.finalTime])
     .range([0, width]);
   
   var y = d3.scale.linear()
-    .domain([1, 0])
+    .domain([3, 0])
     .range([0, height]);
   
   var xAxis = d3.svg.axis()
@@ -57,16 +60,27 @@ Chromatogram.prototype.draw = function (simulator, selector) {
     .attr("transform", "translate(" + margin.left + "," + height + ")")
     .call(xAxis)
     .append("text")
-    .text("time (seconds)")
-  ;
+    .text("time (seconds)");
+  
   svg.append("g")
     .attr("class", "y axis")
     .attr("transform", "translate(" + margin.left + "," + 0 + ")")
-    .call(yAxis)
-  ;
-  svg.append("path")
+    .call(yAxis);
+
+  var setCount = dataSet.length;
+  for(var s = 0; s < setCount; s++) {
+    var data = [];
+    var series = dataSet[s];
+    var length = series.values.length;
+    for(var i = 0; i < length; i++) {
+      data.push([i, series.values[i]]);
+    }
+
+    svg.append("path")
     .datum(data)
     .attr("class", "line")
     .attr("transform", "translate(" + margin.left + "," + 0 + ")")
     .attr("d", line);
+  }
+
 };
