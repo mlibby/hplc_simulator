@@ -14,6 +14,13 @@
         .when('/status', {templateUrl: '/html/status.html'})
         .when('/references', {templateUrl: '/html/references.html'})
         .otherwise({ redirectTo: '/' });
-    });
+    })
+
+    .config( function($mdThemingProvider) {
+      $mdThemingProvider.theme('default')
+        .primaryPalette('blue-grey')
+        .accentPalette('blue')
+    })
+  ;
 
 })();
