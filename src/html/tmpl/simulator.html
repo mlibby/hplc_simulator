@@ -1,6 +1,6 @@
 <md-content ng-controller="SimulatorCtrl as ctrl" layout="column">
   <section class="limited-width">
-    <h2 class="md-subheader">Chromatogram</h2>
+    <md-subheader>Chromatogram</md-subheader>
     <div id="chart"></div>
   </section>
 
@@ -21,8 +21,8 @@
       <md-tab id="tab-column" aria-controls="content-column">
         Column
       </md-tab>
-      <md-tab id="tab-compounds" aria-controls="content-compounds">
-        Compounds
+      <md-tab id="tab-compounds" aria-controls="content-analyte">
+        Analyte
       </md-tab>
     </md-tabs>
 
@@ -42,7 +42,7 @@
       <section class="limited-width" id="content-column" ng-switch-when="4" md-swipe-left="nextTab()" md-swipe-right="previousTab()" role="tabpanel">
         <ng-include src="'/html/column_properties.html'"></ng-include>
       </section>
-      <section class="limited-width" id="content-compounds" ng-switch-when="5" md-swipe-left="nextTab()" md-swipe-right="previousTab()" role="tabpanel">
+      <section class="limited-width" id="content-analyte" ng-switch-when="5" md-swipe-left="nextTab()" md-swipe-right="previousTab()" role="tabpanel">
         <ng-include src="'/html/compounds.html'"></ng-include>
       </section>
     </ng-switch>
