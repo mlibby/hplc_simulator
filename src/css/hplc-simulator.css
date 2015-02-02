@@ -80,7 +80,30 @@ table th {
 
 #chart .line {
   stroke: #303030;
-  stroke-width: 1.5px;
+  stroke-width: 1px;
   fill: none;
 }
 
+#chart .line.analyte {
+  stroke-width: 1.5px;
+}
+
+#chart .line.phenol {
+  stroke: #ff0000;
+}
+
+#chart .line.phenylpropanol {
+  stroke: #00aa00;
+}
+
+#chart .line.acetophenone {
+  stroke: #0000ff;
+}
+
+#chart .line.pchlorophenol {
+  stroke: #bbbb00;
+}
+
+#chart .line.pnitrotoluene {
+  stroke: #ff00ff;
+}

@@ -5,6 +5,24 @@ angular
 function Chromatogram() {
 };
 
+var allCompoundSeries = function _allCompoundSeries (dataSet) {
+  var series = [];
+  for(var p in dataSet) {
+    var ds = dataSet[p];
+    if(ds.type !== 'compound') {
+      break;
+    }
+
+    for(var v in ds.values) {
+      while(series.length <= v) {
+        series.push(0);
+      }
+      series[v] += ds.values[v];
+    }
+  }
+  return series;
+};
+
 /*
   simulator = an instance of Simulator
   selector = a css selector for the chart "container"
@@ -14,10 +32,17 @@ Chromatogram.prototype.draw = function (simulator, selector) {
   for(var i = 0; i < simulator.compounds.length; i++) {
     var compound = simulator.compounds[i];
     dataSet.push({
+      type: 'compound',
       label: compound.name,
       values: simulator.getCompoundSeries(compound),
     });
   }
+
+  dataSet.push({
+    type: 'analyte',
+    label: 'Analyte',
+    values: allCompoundSeries(dataSet)
+  });
 
   var chartContainer = d3.select(selector);
   chartContainer.select('*').remove();
@@ -75,12 +100,12 @@ Chromatogram.prototype.draw = function (simulator, selector) {
     for(var i = 0; i < length; i++) {
       data.push([i, series.values[i]]);
     }
-
+    
     svg.append("path")
-    .datum(data)
-    .attr("class", "line")
-    .attr("transform", "translate(" + margin.left + "," + 0 + ")")
-    .attr("d", line);
+      .datum(data)
+      .attr("class", "line " + dataSet[s].label.toLowerCase().replace(/[^a-z]/ig, ''))
+      .attr("transform", "translate(" + margin.left + "," + 0 + ")")
+      .attr("d", line);
   }
 
 };
