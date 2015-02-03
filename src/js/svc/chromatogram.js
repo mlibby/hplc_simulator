@@ -5,6 +5,8 @@ angular
 function Chromatogram() {
 };
 
+
+
 var allCompoundSeries = function _allCompoundSeries (dataSet) {
   var series = [];
   for(var p in dataSet) {
@@ -41,6 +43,21 @@ var buildDataSet = function _buildDataSet (simulator) {
   });
 
   return dataSet;
+};
+
+var classFromName = function _classFromName (name) {
+  return name.toLowerCase().replace(/[^a-z]/ig, '');
+};
+
+Chromatogram.prototype.highlight = function _highlight (compoundName) {
+  if(compoundName === false) {
+    d3.selectAll(".line").classed({"highlight": false});
+    d3.select(".line.analyte").classed({"no-highlight": false});
+  } else {
+    var selector = ".line." + classFromName(compoundName);
+    d3.select(selector).classed({"highlight": true});
+    d3.select(".line.analyte").classed({"no-highlight": true});
+  }
 };
 
 /*
@@ -109,7 +126,7 @@ Chromatogram.prototype.draw = function (simulator, selector) {
     
     svg.append("path")
       .datum(data)
-      .attr("class", "line " + dataSet[s].label.toLowerCase().replace(/[^a-z]/ig, ''))
+      .attr("class", "line " + classFromName(dataSet[s].label))
       .attr("transform", "translate(" + margin.left + "," + 0 + ")")
       .attr("d", line);
   }

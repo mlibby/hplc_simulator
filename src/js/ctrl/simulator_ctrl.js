@@ -17,10 +17,6 @@ SimulatorCtrl.prototype.drawChromatogram = function _drawChromatogram (simulator
   this.chromatogram.draw(simulator, '#chart');
 };
 
-SimulatorCtrl.prototype.hoverCompound = function _hoverCompound (compound) {
-  this.chromatogram.highlight(compound.name);
-};
-
 SimulatorCtrl.prototype.primarySolvents = function() {
   return HPLC.primarySolvents;
 };
