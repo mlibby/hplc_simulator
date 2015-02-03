@@ -80,12 +80,24 @@ table th {
 
 #chart .line {
   stroke: #303030;
-  stroke-width: 1px;
+  stroke-width: 0.5px;
   fill: none;
+  z-index: 1;
+}
+
+#chart .line.highlight {
+  stroke-width: 3px;
+  z-index: 5;
 }
 
 #chart .line.analyte {
-  stroke-width: 1.5px;
+  stroke-width: 2px;
+  z-index: 5;
+}
+
+#chart .line.analyte.no-highlight {
+  stroke-width: 0.5px;
+  z-index: 1;
 }
 
 #chart .line.phenol {
