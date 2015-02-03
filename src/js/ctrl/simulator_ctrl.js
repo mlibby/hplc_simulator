@@ -5,6 +5,7 @@ angular
   .controller('SimulatorCtrl', [ '$window', 'chromatogram', SimulatorCtrl ]);
 
 function SimulatorCtrl($window, chromatogram) {
+  this.window = $window;
   this.chromatogram = chromatogram;
   var _this = this;
   this.simulator = new HPLC.Simulator(this.drawChromatogram.bind(this));
@@ -14,6 +15,10 @@ function SimulatorCtrl($window, chromatogram) {
 
 SimulatorCtrl.prototype.drawChromatogram = function _drawChromatogram (simulator) {
   this.chromatogram.draw(simulator, '#chart');
+};
+
+SimulatorCtrl.prototype.hoverCompound = function _hoverCompound (compound) {
+  this.chromatogram.highlight(compound.name);
 };
 
 SimulatorCtrl.prototype.primarySolvents = function() {

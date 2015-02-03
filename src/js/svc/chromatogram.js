@@ -23,11 +23,7 @@ var allCompoundSeries = function _allCompoundSeries (dataSet) {
   return series;
 };
 
-/*
-  simulator = an instance of Simulator
-  selector = a css selector for the chart "container"
-*/
-Chromatogram.prototype.draw = function (simulator, selector) {
+var buildDataSet = function _buildDataSet (simulator) {
   var dataSet = [];
   for(var i = 0; i < simulator.compounds.length; i++) {
     var compound = simulator.compounds[i];
@@ -44,6 +40,16 @@ Chromatogram.prototype.draw = function (simulator, selector) {
     values: allCompoundSeries(dataSet)
   });
 
+  return dataSet;
+};
+
+/*
+  simulator = an instance of Simulator
+  selector = a css selector for the chart "container"
+*/
+Chromatogram.prototype.draw = function (simulator, selector) {
+  var dataSet = buildDataSet(simulator);
+  
   var chartContainer = d3.select(selector);
   chartContainer.select('*').remove();
   
