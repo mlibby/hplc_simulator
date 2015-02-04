@@ -28,6 +28,15 @@
     <script src="js/libs.js"></script>
     <script src="js/hplc.js"></script>
     <script src="js/templates.js"></script>
+    <script>
+      function goo (e) {
+      alert("Clicked " + e.target.innerHTML.trim());
+      };
+      
+      $(document).ready(function() {
+      $("a").on('click', goo);
+      });
+    </script>
   </head>
 
   <body layout="column" ng-controller="AppCtrl as app">

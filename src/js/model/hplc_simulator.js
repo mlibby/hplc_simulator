@@ -153,7 +153,7 @@ Simulator.prototype.update = function _update () {
     this.finalTime = f.maxRetentionTime(this.compounds) * 1.1;
   }
 
-  this.updateObserver(this);
+  this.updateObserver();
 };
 
 Simulator.prototype.updateCompounds = function _updateCompounds () {

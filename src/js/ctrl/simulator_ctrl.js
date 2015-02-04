@@ -9,12 +9,15 @@ function SimulatorCtrl($window, chromatogram) {
   this.chromatogram = chromatogram;
   var _this = this;
   this.simulator = new HPLC.Simulator(this.drawChromatogram.bind(this));
+  this.drawChromatogram();
   this.selectedTab = 0;
-  angular.element($window).bind("resize", this.drawChromatogram);
+  angular.element($window).bind("resize", this.drawChromatogram.bind(this));
 };
 
-SimulatorCtrl.prototype.drawChromatogram = function _drawChromatogram (simulator) {
-  this.chromatogram.draw(simulator, '#chart');
+SimulatorCtrl.prototype.drawChromatogram = function _drawChromatogram () {
+  if(this.simulator) {
+    this.chromatogram.draw(this.simulator, '#chart');
+  }
 };
 
 SimulatorCtrl.prototype.primarySolvents = function() {
