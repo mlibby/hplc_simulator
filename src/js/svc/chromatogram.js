@@ -5,8 +5,6 @@ angular
 function Chromatogram() {
 };
 
-
-
 var allCompoundSeries = function _allCompoundSeries (dataSet) {
   var series = [];
   for(var p in dataSet) {
@@ -49,6 +47,29 @@ var classFromName = function _classFromName (name) {
   return name.toLowerCase().replace(/[^a-z]/ig, '');
 };
 
+var formatTime = function _formatTime (d) {
+  var timeParts = [];
+  if(d > 3600) {
+    var hours =  Math.floor(d / 3600);
+    timeParts.push(hours);
+    d -= hours * 3600;
+  }
+
+  var minutes = Math.floor(d / 60);
+  if(timeParts.length > 0) {
+    minutes = '0' + minutes;
+    timeParts.push(minutes.substring(minutes.length - 2));
+  } else {
+    timeParts.push(minutes);
+  }
+  d -= minutes * 60;
+
+  var seconds = '0' + d;
+  timeParts.push(seconds.substring(seconds.length - 2));
+  
+  return timeParts.join(':');
+};
+
 Chromatogram.prototype.highlight = function _highlight (compoundName) {
   if(compoundName === false) {
     d3.selectAll(".line").classed({"highlight": false});
@@ -84,10 +105,28 @@ Chromatogram.prototype.draw = function (simulator, selector) {
   var y = d3.scale.linear()
     .domain([3, 0])
     .range([0, height]);
+
+  var tickInterval = 15;
+  var duration = simulator.finalTime - simulator.initialTime;
+  var pps = width / duration;
+  if (pps < 2) {
+    tickInterval = 30;
+  }
+  if (pps < 1.5) {
+    tickInterval = 60;
+  }
+  if(pps < 0.5) {
+    tickInterval = 120;
+  }
+  if(pps < 0.3) {
+    tickInterval = 300;
+  }
   
   var xAxis = d3.svg.axis()
     .scale(x)
-    .orient("bottom");
+    .orient("bottom")
+    .tickFormat(formatTime)
+    .tickValues(d3.range(simulator.initialTime, simulator.finalTime, tickInterval));
   
   var yAxis = d3.svg.axis()
     .scale(y)
@@ -108,7 +147,8 @@ Chromatogram.prototype.draw = function (simulator, selector) {
     .attr("transform", "translate(" + margin.left + "," + height + ")")
     .call(xAxis)
     .append("text")
-    .text("time (seconds)");
+    .attr("transform", "translate(" + (width / 2 - margin.left) + ",32)")
+    .text("time");
   
   svg.append("g")
     .attr("class", "y axis")
