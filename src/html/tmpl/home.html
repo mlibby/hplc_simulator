@@ -1,4 +1,4 @@
-<div layout="column" layout-fill>
+<div id="home" layout="column" layout-fill>
   <md-whiteframe class="md-whiteframe-z1" layout layout-align="center center">
     <span>This project is still in the early stages. The simulator is just barely operational. See the <a href="/status">Status Page</a> for more information.</span>
   </md-whiteframe>
@@ -12,3 +12,10 @@
     <span>Read the <a href="/references">References</a> cited in this work</span>
   </md-whiteframe>
 </div>
+<script>
+  $("#home a").on('click', function (e) {
+    ga('send', 'event', 'link', 'click', $(e.target).attr('href'));
+  });
+</script>
+
+

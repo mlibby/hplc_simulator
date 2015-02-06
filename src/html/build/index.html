@@ -29,12 +29,12 @@
     <script src="js/hplc.js"></script>
     <script src="js/templates.js"></script>
     <script>
-      function goo (e) {
-      alert("Clicked " + e.target.innerHTML.trim());
-      };
-      
       $(document).ready(function() {
-      $("a").on('click', goo);
+
+      $("a").on('click', function (e) {
+        ga('send', 'event', 'nav link', 'click', $(e.target).attr("href"));
+      });
+      
       });
     </script>
   </head>
