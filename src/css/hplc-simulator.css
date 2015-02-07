@@ -2,6 +2,15 @@ header {
   padding: 0 16px;
 }
 
+body {
+  overflow: hidden;
+}
+
+main {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
 section h2.md-subheader {
   margin-bottom: 0;
   padding-bottom: 0;
@@ -15,14 +24,6 @@ section label {
 section p,
 section fieldset {
   margin: 16px;
-}
-
-main {
-  width: 100%;
-}
-
-.limited-width {
-  max-width: 880px;
 }
 
 fieldset fieldset {

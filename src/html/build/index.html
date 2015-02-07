@@ -39,7 +39,7 @@
     </script>
   </head>
 
-  <body layout="column" ng-controller="AppCtrl as app">
+  <body ng-controller="AppCtrl as app" layout="column">
 
     <md-toolbar class="md-shadow-bottom-z-1" layout="row" layout-align="center start">
       <header class="md-toolbar-tools">
@@ -52,9 +52,7 @@
       </header>
     </md-toolbar>
 
-    <md-content layout="column" layout-align="start start" md-scroll-y>
-
-      <main role="main" ng-view="" ></main>
+      <main role="main" ng-view=""></main>
 
       <md-sidenav md-component-id="right" class="md-sidenav-right md-shadow-bottom-z-1">
         <ul>
@@ -64,8 +62,6 @@
           <li><a href="/references" ng-click="app.clickNav()">References</a></li>
         </ul>
       </md-sidenav>
-
-    </md-content>
 
   </body>
 

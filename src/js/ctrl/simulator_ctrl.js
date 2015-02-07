@@ -1,26 +1,37 @@
-var HPLC = require("../model/hplc").hplc;
+var HPLC = require('../model/hplc').hplc;
 
 angular
   .module('hplcSimulator')
-  .controller('SimulatorCtrl', [ '$window', 'chromatogram', SimulatorCtrl ]);
+  .controller('SimulatorCtrl', [ '$window', '$mdUtil', 'chromatogram', SimulatorCtrl ]);
 
-function SimulatorCtrl($window, chromatogram) {
+function SimulatorCtrl($window, $mdUtil, chromatogram) {
   this.window = $window;
+  this.mdUtil = $mdUtil;
   this.chromatogram = chromatogram;
   var _this = this;
+
+  this.chartSelector = '#chart';
   this.simulator = new HPLC.Simulator(this.drawChromatogram.bind(this));
   this.drawChromatogram();
   this.selectedTab = 0;
-  angular.element($window).bind("resize", this.drawChromatogram.bind(this));
+  angular.element($window)
+    .bind('resize',
+          this.mdUtil.debounce( this.drawChromatogram, 10, this, false));
 };
 
-SimulatorCtrl.prototype.drawChromatogram = function _drawChromatogram () {
+SimulatorCtrl.prototype.clearChromatogram = function () {
   if(this.simulator) {
-    this.chromatogram.draw(this.simulator, '#chart');
+    this.chromatogram.clear(this.chartSelector);
   }
 };
 
-SimulatorCtrl.prototype.primarySolvents = function() {
+SimulatorCtrl.prototype.drawChromatogram = function () {
+  if(this.simulator) {
+    this.chromatogram.draw(this.simulator, this.chartSelector);
+  }
+};
+
+SimulatorCtrl.prototype.primarySolvents = function () {
   return HPLC.primarySolvents;
 };
 

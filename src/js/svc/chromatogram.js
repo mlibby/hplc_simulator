@@ -72,30 +72,29 @@ var formatTime = function _formatTime (d) {
   return timeParts.join(':');
 };
 
-Chromatogram.prototype.highlight = function _highlight (compoundName) {
+Chromatogram.prototype.highlight = function (compoundName) {
   if(compoundName === false) {
-    d3.selectAll(".line").classed({"highlight": false});
-    d3.select(".line.analyte").classed({"no-highlight": false});
+    d3.selectAll('.line').classed({'highlight': false});
+    d3.select('.line.analyte').classed({'no-highlight': false});
   } else {
-    var selector = ".line." + classFromName(compoundName);
-    d3.select(selector).classed({"highlight": true});
-    d3.select(".line.analyte").classed({"no-highlight": true});
+    var selector = '.line.' + classFromName(compoundName);
+    d3.select(selector).classed({'highlight': true});
+    d3.select('.line.analyte').classed({'no-highlight': true});
   }
 };
 
 /*
   simulator = an instance of Simulator
-  selector = a css selector for the chart "container"
+  selector = a css selector for the chart 'container'
 */
 Chromatogram.prototype.draw = function (simulator, selector) {
   var dataSet = buildDataSet(simulator);
   
   var chartContainer = d3.select(selector);
   chartContainer.select('*').remove();
-  
-  var svgWidth = chartContainer.style("width").replace(/\D/g, '') - 16;
+  var svgWidth = chartContainer.style('width').replace(/px$/, '') - 16;
   var svgHeight = svgWidth / 1.77;
-  chartContainer.style("height", svgHeight + "px");
+  chartContainer.style('height', svgHeight + 'px');
   
   var margin = {top: 20, right: 40, bottom: 50, left: 20},
   width = svgWidth - margin.left - margin.right;
@@ -133,35 +132,35 @@ Chromatogram.prototype.draw = function (simulator, selector) {
   
   var xAxis = d3.svg.axis()
     .scale(x)
-    .orient("bottom")
+    .orient('bottom')
     .tickFormat(formatTime)
     .tickValues(d3.range(simulator.initialTime, simulator.finalTime, tickInterval));
   
   var yAxis = d3.svg.axis()
     .scale(y)
-    .orient("left");
+    .orient('left');
   
   var line = d3.svg.line()
     .x(function(d) { return x(d[0]); })
     .y(function(d) { return y(d[1]); });
   
-  var svg = chartContainer.append("svg")
-    .attr("width", svgWidth)
-    .attr("height", svgHeight)
-    .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  var svg = chartContainer.append('svg')
+    .attr('width', svgWidth)
+    .attr('height', svgHeight)
+    .append('g')
+    .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
   
-  svg.append("g")
-    .attr("class", "x axis")
-    .attr("transform", "translate(" + margin.left + "," + height + ")")
+  svg.append('g')
+    .attr('class', 'x axis')
+    .attr('transform', 'translate(' + margin.left + ',' + height + ')')
     .call(xAxis)
-    .append("text")
-    .attr("transform", "translate(" + (width / 2 - margin.left) + ",32)")
-    .text("time");
+    .append('text')
+    .attr('transform', 'translate(' + (width / 2 - margin.left) + ',32)')
+    .text('time');
   
-  svg.append("g")
-    .attr("class", "y axis")
-    .attr("transform", "translate(" + margin.left + "," + 0 + ")")
+  svg.append('g')
+    .attr('class', 'y axis')
+    .attr('transform', 'translate(' + margin.left + ',' + 0 + ')')
     .call(yAxis);
 
   var setCount = dataSet.length;
@@ -173,11 +172,11 @@ Chromatogram.prototype.draw = function (simulator, selector) {
       data.push([i, series.values[i]]);
     }
     
-    svg.append("path")
+    svg.append('path')
       .datum(data)
-      .attr("class", "line " + classFromName(dataSet[s].label))
-      .attr("transform", "translate(" + margin.left + "," + 0 + ")")
-      .attr("d", line);
+      .attr('class', 'line ' + classFromName(dataSet[s].label))
+      .attr('transform', 'translate(' + margin.left + ',' + 0 + ')')
+      .attr('d', line);
   }
 
 };

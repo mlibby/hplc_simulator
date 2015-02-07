@@ -32,6 +32,10 @@ md-toolbar .md-shadow-bottom-z-1 {
   z-index: 5;
 }
 
+md-content {
+  overflow-x: hidden;
+}
+
 md-input-container label {
   font-size: 18px;
 }
@@ -58,7 +62,7 @@ md-input-container .md-input[type=number] {
 }
 
 md-slider {
-  max-width: 300px;
+  width: 50%;
 }
 
 .slider-container {
@@ -68,12 +72,18 @@ md-slider {
 input[type=number].slider-control {
   position: absolute;
   top: 30px;
-  left: 324px;
+  left: 54%;
+  width: 43%;
+  max-width:100px;
 }
 
 md-whiteframe {
   margin: 12px;
-  padding: 12px;
+//  padding: 12px;
+}
+
+md-tabs {
+  overflow: hidden;
 }
 
 .md-sidenav-right {

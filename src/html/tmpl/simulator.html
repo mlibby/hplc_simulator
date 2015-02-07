@@ -1,22 +1,13 @@
-<md-content ng-controller="SimulatorCtrl as ctrl" layout="column">
-  <section class="limited-width">
+<md-content ng-controller="SimulatorCtrl as ctrl" layout-sm="column" layout-md="column" layout-lg="row" layout-gt-lg="row">
+  <md-whiteframe class="md-whiteframe-z1" flex>
     <md-subheader>Chromatogram</md-subheader>
     <div id="chart"></div>
-  </section>
+  </md-whiteframe>
 
-  <div>
-    <md-tabs md-selected="ctrl.selectedTab">
+  <md-whiteframe class="md-whiteframe-z1" flex>
+    <md-tabs md-selected="ctrl.selectedTab" flex>
       <md-tab id="tab-composition" aria-controls="content-composition">
-        Composition
-      </md-tab>
-      <md-tab id="tab-plot-options" aria-controls="content-plot-options">
-        2nd Plot
-      </md-tab>
-      <md-tab id="tab-chromatographic" aria-controls="content-chromatographic" onclick="goo();">
-        Chromatographic
-      </md-tab>
-      <md-tab id="tab-general" aria-controls="content-general">
-        General
+        Phase
       </md-tab>
       <md-tab id="tab-column" aria-controls="content-column">
         Column
@@ -24,27 +15,38 @@
       <md-tab id="tab-compounds" aria-controls="content-analyte">
         Analyte
       </md-tab>
+      <md-tab id="tab-chromatographic" aria-controls="content-chromatographic">
+        System
+      </md-tab>
+      <md-tab id="tab-general" aria-controls="content-general">
+        General
+      </md-tab>
+      <md-tab id="tab-plot-options" aria-controls="content-plot-options">
+        Chart
+      </md-tab>
     </md-tabs>
 
     <ng-switch on="ctrl.selectedTab" class="tabpanel-container">
-      <section  class="limited-width" id="content-composition" ng-switch-when="0" md-swipe-left="nextTab()" md-swipe-right="previousTab()" role="tabpanel">
+      <md-content md-scroll-y>
+      <section id="content-composition" ng-switch-when="0" md-swipe-left="nextTab()" md-swipe-right="previousTab()" role="tabpanel">
         <ng-include src="'/html/mobile_phase_composition.html'"></ng-include>
       </section>
-      <section class="limited-width" id="content-plot" ng-switch-when="1" md-swipe-left="nextTab()" md-swipe-right="previousTab()" role="tabpanel">
+      <section id="content-plot" ng-switch-when="5" md-swipe-left="nextTab()" md-swipe-right="previousTab()" role="tabpanel">
         <ng-include src="'/html/plot_options.html'" ></ng-include>
       </section>
-      <section class="limited-width" id="content-chromatographic" ng-switch-when="2" md-swipe-left="nextTab()" md-swipe-right="previousTab()" role="tabpanel">
+      <section id="content-chromatographic" ng-switch-when="3" md-swipe-left="nextTab()" md-swipe-right="previousTab()" role="tabpanel">
         <ng-include src="'/html/chromatographic_properties.html'"></ng-include>
       </section>
-      <section class="limited-width" id="content-general" ng-switch-when="3" md-swipe-left="nextTab()" md-swipe-right="previousTab()" role="tabpanel">
+      <section id="content-general" ng-switch-when="4" md-swipe-left="nextTab()" md-swipe-right="previousTab()" role="tabpanel">
         <ng-include src="'/html/general_properties.html'"></ng-include>
       </section>
-      <section class="limited-width" id="content-column" ng-switch-when="4" md-swipe-left="nextTab()" md-swipe-right="previousTab()" role="tabpanel">
+      <section id="content-column" ng-switch-when="1" md-swipe-left="nextTab()" md-swipe-right="previousTab()" role="tabpanel">
         <ng-include src="'/html/column_properties.html'"></ng-include>
       </section>
-      <section class="limited-width" id="content-analyte" ng-switch-when="5" md-swipe-left="nextTab()" md-swipe-right="previousTab()" role="tabpanel">
+      <section id="content-analyte" ng-switch-when="2" md-swipe-left="nextTab()" md-swipe-right="previousTab()" role="tabpanel">
         <ng-include src="'/html/compounds.html'"></ng-include>
       </section>
+      </md-content>
     </ng-switch>
-  </div>
+  </md-whiteframe>
 </md-content>
