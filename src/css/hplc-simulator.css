@@ -43,7 +43,7 @@ table {
 table th,
 table td {
   border: 0;
-  padding: 6px 12px;
+  padding: 8px 16px;
   text-align: left;
   width: auto;
 }
@@ -63,60 +63,88 @@ table th {
   vertical-align: bottom;
 }
 
-#chart {
-  margin: 16px;
+.chromatogram .chart {
+  margin: 16px 16px 8px;
   width: 100%;
 }
 
-#chart .axis {
+.chromatogram .chart .axis {
   stroke-width: 1px;
   stroke: #808080;
   fill: none;
 }
 
-#chart .axis text {
+.chromatogram .chart .axis text {
   fill: #808080;
   font-size: 0.6em;
 }
 
-#chart .line {
+.chromatogram .chart .line {
   stroke: #303030;
   stroke-width: 0.5px;
   fill: none;
   z-index: 1;
 }
 
-#chart .line.highlight {
+.chromatogram .chart .line.highlight {
   stroke-width: 3px;
   z-index: 5;
 }
 
-#chart .line.analyte {
+.chromatogram .chart .line.analyte.highlight {
   stroke-width: 2px;
   z-index: 5;
 }
 
-#chart .line.analyte.no-highlight {
+.chromatogram .chart .line.analyte {
   stroke-width: 0.5px;
   z-index: 1;
 }
 
-#chart .line.phenol {
+.chromatogram .chart .line.phenol {
   stroke: #ff0000;
 }
 
-#chart .line.phenylpropanol {
+.chromatogram .controls .phenol.md-button.md-default-theme.md-raised:not([disabled]) {
+  background-color: #ff0000;
+  color: white;
+}
+
+.chromatogram .controls .phenol.md-button.md-default-theme.md-raised:not([disabled]):focus,
+.chromatogram .controls .phenol:hover {
+  background-color: #dd0000;
+}
+
+.chromatogram .controls .analyte.md-button.md-default-theme.md-raised:not([disabled]) {
+  background-color: #303030;
+  color: white;
+}
+
+.chromatogram .controls .analyte.md-button.md-default-theme.md-raised:not([disabled]):focus,
+.chromatogram .controls .analyte:hover {
+  background-color: #101010;
+}
+
+.chromatogram .chart .line.phenylpropanol {
   stroke: #00aa00;
 }
 
-#chart .line.acetophenone {
+.chromatogram .chart .line.acetophenone {
   stroke: #0000ff;
 }
 
-#chart .line.pchlorophenol {
+.chromatogram .chart .line.pchlorophenol {
   stroke: #bbbb00;
 }
 
-#chart .line.pnitrotoluene {
+.chromatogram .chart .line.pnitrotoluene {
   stroke: #ff00ff;
+}
+
+.chromatogram .controls {
+  margin: 0px 8px 8px;
+}
+
+.chromatogram .controls button {
+  margin: 8px;
 }

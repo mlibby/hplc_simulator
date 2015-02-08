@@ -23,7 +23,7 @@ var allCompoundSeries = function _allCompoundSeries (dataSet) {
   return series;
 };
 
-var buildDataSet = function _buildDataSet (simulator) {
+var buildDataSet = function (simulator) {
   var dataSet = [];
   for(var i = 0; i < simulator.compounds.length; i++) {
     var compound = simulator.compounds[i];
@@ -43,7 +43,7 @@ var buildDataSet = function _buildDataSet (simulator) {
   return dataSet;
 };
 
-var classFromName = function _classFromName (name) {
+var classFromName = function (name) {
   return name.toLowerCase().replace(/[^a-z]/ig, '');
 };
 
@@ -72,15 +72,9 @@ var formatTime = function _formatTime (d) {
   return timeParts.join(':');
 };
 
-Chromatogram.prototype.highlight = function (compoundName) {
-  if(compoundName === false) {
-    d3.selectAll('.line').classed({'highlight': false});
-    d3.select('.line.analyte').classed({'no-highlight': false});
-  } else {
-    var selector = '.line.' + classFromName(compoundName);
-    d3.select(selector).classed({'highlight': true});
-    d3.select('.line.analyte').classed({'no-highlight': true});
-  }
+Chromatogram.prototype.highlight = function (compoundName, highlight) {
+  var selector = '.line.' + classFromName(compoundName);
+  d3.select(selector).classed({'highlight': highlight});
 };
 
 /*
@@ -91,6 +85,10 @@ Chromatogram.prototype.draw = function (simulator, selector) {
   var dataSet = buildDataSet(simulator);
   
   var chartContainer = d3.select(selector);
+  if(chartContainer[0] == null) {
+    return;
+  }
+  
   chartContainer.select('*').remove();
   var svgWidth = chartContainer.style('width').replace(/px$/, '') - 16;
   var svgHeight = svgWidth / 1.77;
@@ -174,7 +172,7 @@ Chromatogram.prototype.draw = function (simulator, selector) {
     
     svg.append('path')
       .datum(data)
-      .attr('class', 'line ' + classFromName(dataSet[s].label))
+      .attr('class', 'line ' + classFromName(dataSet[s].label) + (dataSet[s].label === 'Analyte' ? ' highlight' : ''))
       .attr('transform', 'translate(' + margin.left + ',' + 0 + ')')
       .attr('d', line);
   }

@@ -8,7 +8,7 @@
     <th>&sigma;<sub>total</sub> (s)</th>
     <th>W (pmol)</th>
   </tr>
-  <tr ng-repeat="compound in ctrl.simulator.compounds" ng-mouseenter="ctrl.chromatogram.highlight(compound.name);" ng-mouseleave="ctrl.chromatogram.highlight(false);">
+  <tr ng-repeat="compound in ctrl.simulator.compounds">
     <td class="name">{{ compound.name }}</td>
     <td>{{ compound.concentration | number:1}}</td>
     <td>{{ compound.kPrime | number:4}}</td>

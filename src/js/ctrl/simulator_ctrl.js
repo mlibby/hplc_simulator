@@ -10,8 +10,12 @@ function SimulatorCtrl($window, $mdUtil, chromatogram) {
   this.chromatogram = chromatogram;
   var _this = this;
 
-  this.chartSelector = '#chart';
+  this.chartSelector = '.chromatogram .chart';
+  this.analyteHighlighted = true;
   this.simulator = new HPLC.Simulator(this.drawChromatogram.bind(this));
+
+  this.upgradeCompounds();
+  
   this.drawChromatogram();
   this.selectedTab = 0;
   angular.element($window)
@@ -29,6 +33,32 @@ SimulatorCtrl.prototype.drawChromatogram = function () {
   if(this.simulator) {
     this.chromatogram.draw(this.simulator, this.chartSelector);
   }
+};
+
+SimulatorCtrl.prototype.upgradeCompounds = function () {
+  var compoundPrototype = this.simulator.compounds[0].__proto__;
+
+  angular.forEach(this.simulator.compounds, function (compound) {
+    compound.highlighted = false;
+  });
+  
+  compoundPrototype.getClassName = function () {
+    return this.highlighted ? this.name.toLowerCase().replace(/[^a-z]/ig, '') : null;
+  };
+};
+
+SimulatorCtrl.prototype.getAnalyteClassName = function () {
+  return this.analyteHighlighted ? 'analyte' : null;
+};
+
+SimulatorCtrl.prototype.toggleHighlight = function (compound) {
+  if(compound === 'analyte') {
+    this.analyteHighlighted = !this.analyteHighlighted;
+    compound = {name: 'analyte', highlighted: this.analyteHighlighted};
+  } else {
+    compound.highlighted = !compound.highlighted;
+  }
+  this.chromatogram.highlight(compound.name, compound.highlighted);
 };
 
 SimulatorCtrl.prototype.primarySolvents = function () {

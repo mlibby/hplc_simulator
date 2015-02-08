@@ -241,7 +241,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('build-dev-fonts', ['clean:devFonts', 'copy:devFonts']);
 
-  grunt.registerTask('build-dev-html', ['clean:devHtml', 'copy:devHtml']);
+  grunt.registerTask('build-dev-html', ['clean:devHtml', 'copy:devHtml', 'ngtemplates']);
 
   grunt.registerTask('build-dev-js', ['clean:devJs', 'browserify']);
 
