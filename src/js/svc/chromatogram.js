@@ -5,7 +5,7 @@ angular
 function Chromatogram() {
 };
 
-var allCompoundSeries = function _allCompoundSeries (dataSet) {
+var allCompoundSeries = function (dataSet) {
   var series = [];
   for(var p in dataSet) {
     var ds = dataSet[p];
@@ -47,7 +47,7 @@ var classFromName = function (name) {
   return name.toLowerCase().replace(/[^a-z]/ig, '');
 };
 
-var formatTime = function _formatTime (d) {
+var formatTime = function (d) {
   var timeParts = [];
   if(d >= 3600) {
     var hours =  Math.floor(d / 3600);
