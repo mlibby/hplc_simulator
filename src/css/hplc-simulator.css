@@ -63,8 +63,8 @@ table th {
   vertical-align: bottom;
 }
 
-#home md-whiteframe {
-  padding: 16px;
+#home p {
+  margin-left: 16px;
 }
 
 .chromatogram .chart {

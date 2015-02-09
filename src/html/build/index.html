@@ -43,7 +43,7 @@
 
     <md-toolbar class="md-shadow-bottom-z-1" layout="row" layout-align="center start">
       <header class="md-toolbar-tools">
-        <h1 ng-bind="app.pageTitle"></h1>
+        <h1><a href="/">HPLC Simulator</a></h1>
         <span flex></span>
         <md-button ng-click="app.clickNav()" aria-label="Navigation Menu">
           <span class="icon-nav-menu"></span>
@@ -57,7 +57,7 @@
       <md-sidenav md-component-id="right" class="md-sidenav-right md-shadow-bottom-z-1">
         <ul>
           <li><a href="/" ng-click="app.clickNav()">Home</a></li>
-          <li><a href="/simulator" ng-click="app.clickNav()">Simulator</a></li>
+          <li><a href="/about" ng-click="app.clickNav()">About</a></li>
           <li><a href="/status" ng-click="app.clickNav()">Status</a></li>
           <li><a href="/references" ng-click="app.clickNav()">References</a></li>
         </ul>

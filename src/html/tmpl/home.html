@@ -1,22 +1,12 @@
-<div id="home" layout="column" layout-fill>
-  <md-whiteframe class="md-whiteframe-z1" layout layout-align="center center">
-    <md-subheader>About HPLC Simulator</md-subheader>
-    <span>This project is still in the early stages. The simulator is just barely operational. See the <a href="/status">Status Page</a> for more information.</span>
-  </md-whiteframe>
-  <md-whiteframe class='md-whiteframe-z1' layout layout-align='center center'>
-    <span>See the <a href='/simulator'>HPLC Simulator</a> so far. It's super cool!</span>
-  </md-whiteframe>
-  <md-whiteframe class='md-whiteframe-z1' layout layout-align='center center'>
-    <span>The source code for this application can be found at <a href='https://github.com/mlibby/hplc_simulator'>GitHub</a></span>
-  </md-whiteframe>
-  <md-whiteframe class="md-whiteframe-z1" layout layout-align="center center">
-    <span>Read the <a href="/references">References</a> cited in this work</span>
-  </md-whiteframe>
-</div>
+<md-content id="home" layout="column" layout-fill>
+  <md-subheader>About HPLC Simulator</md-subheader>
+  <p>This project is still in the early stages. The simulator is just barely operational. See the <a href="/status">Status Page</a> for more information.</p>
+  <p>The source code for this application can be found at <a href='https://github.com/mlibby/hplc_simulator'>GitHub</a>.</p>
+  <p>Something not working correctly? Issues are being tracked at the <a href='https://github.com/mlibby/hplc_simulator/issues'>GitHub Issues page</a>. If the issue you are having hasn't been reported yet, please feel free to create a new issue there.</p>
+  <p>Read the <a href="/references">References</a> cited in this work</p>
+</md-content>
 <script>
   $("#home a").on('click', function (e) {
-    ga('send', 'event', 'link', 'click', $(e.target).attr('href'));
+  ga('send', 'event', 'link', 'click', $(e.target).attr('href'));
   });
 </script>
-
-

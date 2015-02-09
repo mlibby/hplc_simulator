@@ -1,16 +1,14 @@
 <md-content ng-controller="SimulatorCtrl as ctrl" layout="column" layout-gt-md="row" layout-align-gt-md="start start">
-  <md-whiteframe class="md-whiteframe-z1" flex>
-    <div class="chromatogram">
-      <md-subheader>Chromatogram</md-subheader>
-      <div class="chart"></div>
-      <div class="controls" layout="row" layout-align="center start" layout-wrap>
-        <md-button class="md-raised" ng-class="ctrl.getAnalyteClassName()" ng-click="ctrl.toggleHighlight('analyte');">
-          Analyte
-        </md-button>
-        <md-button class="md-raised" ng-class="compound.getClassName()" ng-repeat="compound in ctrl.simulator.compounds" ng-click="ctrl.toggleHighlight(compound);">
-          {{compound.name}}
-        </md-button>
-      </div>
+  <md-whiteframe class="chromatogram md-whiteframe-z1" flex>
+    <md-subheader>Chromatogram</md-subheader>
+    <div class="chart"></div>
+    <div class="controls" layout="row" layout-align="center start" layout-wrap>
+      <md-button class="md-raised" ng-class="ctrl.getAnalyteClassName()" ng-click="ctrl.toggleHighlight('analyte');">
+        Analyte
+      </md-button>
+      <md-button class="md-raised" ng-class="compound.getClassName()" ng-repeat="compound in ctrl.simulator.compounds" ng-click="ctrl.toggleHighlight(compound);">
+        {{compound.name}}
+      </md-button>
     </div>
   </md-whiteframe>
 
