@@ -63,6 +63,10 @@ table th {
   vertical-align: bottom;
 }
 
+#home md-whiteframe {
+  padding: 16px;
+}
+
 .chromatogram .chart {
   margin: 16px 16px 8px;
   width: 100%;

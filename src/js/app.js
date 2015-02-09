@@ -9,8 +9,9 @@
       $locationProvider.hashPrefix('!');
 
       $routeProvider
-        .when('/', {templateUrl: '/html/home.html'})
-        .when('/simulator', {templateUrl: '/html/simulator.html'})
+        .when('/', {templateUrl: '/html/simulator.html'})
+        .when('simulator', {redirectTo: '/'})
+        .when('/about', {templateUrl: '/html/home.html'})
         .when('/status', {templateUrl: '/html/status.html'})
         .when('/references', {templateUrl: '/html/references.html'})
         .otherwise({ redirectTo: '/' });
