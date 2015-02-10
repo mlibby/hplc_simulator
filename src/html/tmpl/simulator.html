@@ -2,7 +2,15 @@
   <md-whiteframe class="chromatogram md-whiteframe-z1" flex>
     <md-subheader>Chromatogram</md-subheader>
     <div class="chart"></div>
-    <div class="controls" layout="row" layout-align="center start" layout-wrap>
+    <div class="controls" layout="row" layout-align="center start" hide-gt-lg>
+      <md-button class="md-raised" ng-click="$('#compound-to-highlight').show();this.hide();">
+        Highlight Compound
+      </md-button>
+      <select onload="$(this).hide()" id="compound-to-highlight">
+        <option value="analyte" selected="selected">Analyte</option>
+      </select>
+    </div>
+    <div class="controls" layout="row" layout-align="center start" layout-wrap hide show-gt-lg>
       <md-button class="md-raised" ng-class="ctrl.getAnalyteClassName()" ng-click="ctrl.toggleHighlight('analyte');">
         Analyte
       </md-button>
