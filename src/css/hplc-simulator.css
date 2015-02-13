@@ -30,6 +30,16 @@ fieldset fieldset {
   margin: 2px 2px 16px 2px;
 }
 
+select {
+  padding: 5px;
+  border: 1px solid #d0d0d0;
+  background-color: white;
+  margin: 8px 0;
+  width: 100%;
+  max-width: 356px;
+  border-radius: 4px;
+}
+
 li {
   margin-bottom: 1em;
 }
@@ -83,72 +93,26 @@ table th {
   font-size: 0.6em;
 }
 
-.chromatogram .chart .line {
-  stroke: #303030;
-  stroke-width: 0.5px;
-  fill: none;
-  z-index: 1;
-}
-
-.chromatogram .chart .line.highlight {
-  stroke-width: 3px;
-  z-index: 5;
-}
-
-.chromatogram .chart .line.analyte.highlight {
-  stroke-width: 2px;
-  z-index: 5;
-}
-
-.chromatogram .chart .line.analyte {
-  stroke-width: 0.5px;
-  z-index: 1;
-}
-
-.chromatogram .chart .line.phenol {
-  stroke: #ff0000;
-}
-
-.chromatogram .controls .phenol.md-button.md-default-theme.md-raised:not([disabled]) {
-  background-color: #ff0000;
-  color: white;
-}
-
-.chromatogram .controls .phenol.md-button.md-default-theme.md-raised:not([disabled]):focus,
-.chromatogram .controls .phenol:hover {
-  background-color: #dd0000;
-}
-
-.chromatogram .controls .analyte.md-button.md-default-theme.md-raised:not([disabled]) {
-  background-color: #303030;
-  color: white;
-}
-
-.chromatogram .controls .analyte.md-button.md-default-theme.md-raised:not([disabled]):focus,
-.chromatogram .controls .analyte:hover {
-  background-color: #101010;
-}
-
-.chromatogram .chart .line.phenylpropanol {
-  stroke: #00aa00;
-}
-
-.chromatogram .chart .line.acetophenone {
-  stroke: #0000ff;
-}
-
-.chromatogram .chart .line.pchlorophenol {
-  stroke: #bbbb00;
-}
-
-.chromatogram .chart .line.pnitrotoluene {
-  stroke: #ff00ff;
-}
-
 .chromatogram .controls {
   margin: 0px 8px 8px;
 }
 
 .chromatogram .controls button {
   margin: 8px;
+}
+
+.ng-animate-show {
+//height: auto;
+  opacity: 1;
+}
+
+.ng-animate-show.ng-hide-add.ng-hide-add-active,
+.ng-animate-show.ng-hide-remove.ng-hide-remove-active {
+  -webkit-transition: all ease 0.66s;
+  transition: all ease 0.66s;
+}
+
+.ng-animate-show.ng-hide {
+//  height: 0px;
+  opacity: 0;
 }

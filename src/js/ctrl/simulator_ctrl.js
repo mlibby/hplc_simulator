@@ -17,10 +17,15 @@ function SimulatorCtrl($window, $mdUtil, chromatogram) {
   this.upgradeCompounds();
   
   this.drawChromatogram();
+  this.showCompoundList = false;
   this.selectedTab = 0;
   angular.element($window)
     .bind('resize',
           this.mdUtil.debounce( this.drawChromatogram, 10, this, false));
+};
+
+SimulatorCtrl.prototype.toggleCompoundList = function () {
+  this.showCompoundList = !this.showCompoundList;
 };
 
 SimulatorCtrl.prototype.clearChromatogram = function () {
@@ -39,7 +44,7 @@ SimulatorCtrl.prototype.upgradeCompounds = function () {
   var compoundPrototype = this.simulator.compounds[0].__proto__;
 
   angular.forEach(this.simulator.compounds, function (compound) {
-    compound.highlighted = false;
+    compound.highlighted = true;
   });
   
   compoundPrototype.getClassName = function () {

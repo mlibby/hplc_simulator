@@ -22,9 +22,6 @@ module.exports = function(grunt) {
     },
 
     concat: {
-      options: {
-        separator: '\n;',
-      },
       css: {
         src: ['src/css/*.css'],
         dest: 'dist/dev/css/hplc.css'
@@ -38,6 +35,7 @@ module.exports = function(grunt) {
         dest: 'dist/dev/css/libs.css'
       },
       jsLibs: {
+        separator: '\n;',
         src: [
           "bower_components/hammerjs/hammer.min.js",
           "bower_components/angular/angular.min.js",
@@ -47,6 +45,7 @@ module.exports = function(grunt) {
           "bower_components/angular-material/angular-material.min.js",
           "bower_components/jquery/dist/jquery.min.js",
           "bower_components/d3/d3.min.js",
+          "bower_components/colorbrewer/colorbrewer.js"
         ],
         dest: 'dist/dev/js/libs.js'
       }

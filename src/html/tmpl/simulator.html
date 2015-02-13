@@ -2,21 +2,15 @@
   <md-whiteframe class="chromatogram md-whiteframe-z1" flex>
     <md-subheader>Chromatogram</md-subheader>
     <div class="chart"></div>
-    <div class="controls" layout="row" layout-align="center start" hide-gt-lg>
-      <md-button class="md-raised" ng-click="$('#compound-to-highlight').show();this.hide();">
-        Highlight Compound
+    <div class="controls" layout="column" layout-align="start center">
+      <md-button class="md-raised" ng-click="ctrl.toggleCompoundList();">
+        Show/Hide Compounds
       </md-button>
-      <select onload="$(this).hide()" id="compound-to-highlight">
-        <option value="analyte" selected="selected">Analyte</option>
-      </select>
-    </div>
-    <div class="controls" layout="row" layout-align="center start" layout-wrap hide show-gt-lg>
-      <md-button class="md-raised" ng-class="ctrl.getAnalyteClassName()" ng-click="ctrl.toggleHighlight('analyte');">
-        Analyte
-      </md-button>
-      <md-button class="md-raised" ng-class="compound.getClassName()" ng-repeat="compound in ctrl.simulator.compounds" ng-click="ctrl.toggleHighlight(compound);">
-        {{compound.name}}
-      </md-button>
+      <md-checkbox-group class="ng-animate-show" ng-show="ctrl.showCompoundList" ng-animate-children>
+        <md-checkbox ng-class="compound.getClassName()" ng-repeat="compound in ctrl.simulator.compounds" ng-model="compound.highlighted">
+          {{compound.name}}
+        </md-checkbox>
+      </md-checkbox-group>
     </div>
   </md-whiteframe>
 
@@ -44,24 +38,24 @@
 
     <ng-switch on="ctrl.selectedTab" class="tabpanel-container">
       <md-content md-scroll-y>
-      <section id="content-composition" ng-switch-when="0" md-swipe-left="nextTab()" md-swipe-right="previousTab()" role="tabpanel">
-        <ng-include src="'/html/mobile_phase_composition.html'"></ng-include>
-      </section>
-      <section id="content-plot" ng-switch-when="5" md-swipe-left="nextTab()" md-swipe-right="previousTab()" role="tabpanel">
-        <ng-include src="'/html/plot_options.html'" ></ng-include>
-      </section>
-      <section id="content-chromatographic" ng-switch-when="3" md-swipe-left="nextTab()" md-swipe-right="previousTab()" role="tabpanel">
-        <ng-include src="'/html/chromatographic_properties.html'"></ng-include>
-      </section>
-      <section id="content-general" ng-switch-when="4" md-swipe-left="nextTab()" md-swipe-right="previousTab()" role="tabpanel">
-        <ng-include src="'/html/general_properties.html'"></ng-include>
-      </section>
-      <section id="content-column" ng-switch-when="1" md-swipe-left="nextTab()" md-swipe-right="previousTab()" role="tabpanel">
-        <ng-include src="'/html/column_properties.html'"></ng-include>
-      </section>
-      <section id="content-analyte" ng-switch-when="2" md-swipe-left="nextTab()" md-swipe-right="previousTab()" role="tabpanel">
-        <ng-include src="'/html/compounds.html'"></ng-include>
-      </section>
+        <section id="content-composition" ng-switch-when="0" md-swipe-left="nextTab()" md-swipe-right="previousTab()" role="tabpanel">
+          <ng-include src="'/html/mobile_phase_composition.html'"></ng-include>
+        </section>
+        <section id="content-plot" ng-switch-when="5" md-swipe-left="nextTab()" md-swipe-right="previousTab()" role="tabpanel">
+          <ng-include src="'/html/plot_options.html'" ></ng-include>
+        </section>
+        <section id="content-chromatographic" ng-switch-when="3" md-swipe-left="nextTab()" md-swipe-right="previousTab()" role="tabpanel">
+          <ng-include src="'/html/chromatographic_properties.html'"></ng-include>
+        </section>
+        <section id="content-general" ng-switch-when="4" md-swipe-left="nextTab()" md-swipe-right="previousTab()" role="tabpanel">
+          <ng-include src="'/html/general_properties.html'"></ng-include>
+        </section>
+        <section id="content-column" ng-switch-when="1" md-swipe-left="nextTab()" md-swipe-right="previousTab()" role="tabpanel">
+          <ng-include src="'/html/column_properties.html'"></ng-include>
+        </section>
+        <section id="content-analyte" ng-switch-when="2" md-swipe-left="nextTab()" md-swipe-right="previousTab()" role="tabpanel">
+          <ng-include src="'/html/compounds.html'"></ng-include>
+        </section>
       </md-content>
     </ng-switch>
   </md-whiteframe>

@@ -5,73 +5,6 @@ angular
 function Chromatogram() {
 };
 
-var allCompoundSeries = function (dataSet) {
-  var series = [];
-  for(var p in dataSet) {
-    var ds = dataSet[p];
-    if(ds.type !== 'compound') {
-      break;
-    }
-
-    for(var v in ds.values) {
-      while(series.length <= v) {
-        series.push(0);
-      }
-      series[v] += ds.values[v];
-    }
-  }
-  return series;
-};
-
-var buildDataSet = function (simulator) {
-  var dataSet = [];
-  for(var i = 0; i < simulator.compounds.length; i++) {
-    var compound = simulator.compounds[i];
-    dataSet.push({
-      type: 'compound',
-      label: compound.name,
-      values: simulator.getCompoundSeries(compound),
-    });
-  }
-
-  dataSet.push({
-    type: 'analyte',
-    label: 'Analyte',
-    values: allCompoundSeries(dataSet)
-  });
-
-  return dataSet;
-};
-
-var classFromName = function (name) {
-  return name.toLowerCase().replace(/[^a-z]/ig, '');
-};
-
-var formatTime = function (d) {
-  var timeParts = [];
-  if(d >= 3600) {
-    var hours =  Math.floor(d / 3600);
-    timeParts.push(hours);
-    d -= hours * 3600;
-  }
-
-  var minutes = Math.floor(d / 60);
-  if(minutes === 60) {
-    timeParts.push('00');
-  } else if(timeParts.length > 0) {
-    minutes = '0' + minutes;
-    timeParts.push(minutes.substring(minutes.length - 2));
-  } else {
-    timeParts.push(minutes);
-  }
-  d -= minutes * 60;
-
-  var seconds = '0' + d;
-  timeParts.push(seconds.substring(seconds.length - 2));
-  
-  return timeParts.join(':');
-};
-
 Chromatogram.prototype.highlight = function (compoundName, highlight) {
   var selector = '.line.' + classFromName(compoundName);
   d3.select(selector).classed({'highlight': highlight});
@@ -82,8 +15,8 @@ Chromatogram.prototype.highlight = function (compoundName, highlight) {
   selector = a css selector for the chart 'container'
 */
 Chromatogram.prototype.draw = function (simulator, selector) {
-  var dataSet = buildDataSet(simulator);
-  
+  var data = buildData(simulator);
+
   var chartContainer = d3.select(selector);
   if(chartContainer[0] == null) {
     return;
@@ -105,6 +38,14 @@ Chromatogram.prototype.draw = function (simulator, selector) {
   var y = d3.scale.linear()
     .domain([3, 0])
     .range([0, height]);
+
+  /*
+    See http://colorbrewer2.org/
+    for information about color choices
+  */
+  var colorIndex = Math.min(11, Math.max(3, simulator.compounds.length));
+  var colors = d3.scale.ordinal()
+    .range(colorbrewer.Paired[12]); //simulator.compounds.length]);
 
   var tickInterval = 15;
   var duration = simulator.finalTime - simulator.initialTime;
@@ -138,10 +79,6 @@ Chromatogram.prototype.draw = function (simulator, selector) {
     .scale(y)
     .orient('left');
   
-  var line = d3.svg.line()
-    .x(function(d) { return x(d[0]); })
-    .y(function(d) { return y(d[1]); });
-  
   var svg = chartContainer.append('svg')
     .attr('width', svgWidth)
     .attr('height', svgHeight)
@@ -161,20 +98,102 @@ Chromatogram.prototype.draw = function (simulator, selector) {
     .attr('transform', 'translate(' + margin.left + ',' + 0 + ')')
     .call(yAxis);
 
-  var setCount = dataSet.length;
-  for(var s = 0; s < setCount; s++) {
-    var data = [];
-    var series = dataSet[s];
-    var length = series.values.length;
-    for(var i = 0; i < length; i++) {
-      data.push([i, series.values[i]]);
+  var orderByMax = function (data) {
+    var maxes = {};
+    for(var i = 0; i < data.length; i++) {
+      var max = Math.max.apply(null, data[i].map(function (d) { return d[1]; }));
+      maxes[max] = maxes[max] || [];
+      maxes[max].push(i);
     }
-    
-    svg.append('path')
-      .datum(data)
-      .attr('class', 'line ' + classFromName(dataSet[s].label) + (dataSet[s].label === 'Analyte' ? ' highlight' : ''))
-      .attr('transform', 'translate(' + margin.left + ',' + 0 + ')')
-      .attr('d', line);
+    console.log(maxes);
+    var sortedKeys = Object.keys(maxes).sort();
+    console.log(sortedKeys);
+    return sortedKeys.map(function (k) { return maxes[k]; });
+  };
+  
+  var stack = d3.layout.stack()
+    .offset('zero')
+    .order(orderByMax)
+    .values(function (d) { return d.values; });
+
+  var layers = stack(data);
+  
+  var area = d3.svg.area()
+    .interpolate('monotone')
+    .x(function (d, i) { return x(i); })
+    .y0(function (d) { return y(d.y0); })
+    .y1(function (d) { return y(d.y0 + d.y); });
+
+  svg.selectAll('.layer')
+    .data(layers)
+    .enter().append('path')
+    .attr('class', 'layer')
+    .attr('d', function (d) { return area(d.values); })
+    .style('fill', function (d, i) { return colors(i); });
+};
+
+var allCompoundSeries = function (dataSet) {
+  var series = [];
+  for(var p in dataSet) {
+    var ds = dataSet[p];
+    if(ds.type !== 'compound') {
+      break;
+    }
+
+    for(var v in ds.values) {
+      while(series.length <= v) {
+        series.push(0);
+      }
+      series[v] += ds.values[v].y;
+    }
+  }
+  return series;
+};
+
+var buildData = function (simulator) {
+  var data = [];
+  for(var i = 0; i < simulator.compounds.length; i++) {
+    var compound = simulator.compounds[i];
+    var values = simulator.getCompoundSeries(compound)
+        .map(function (e, i) {
+          return {x: i, y: e, y0: 0};
+        });
+    data.push({
+      type: 'compound',
+      label: compound.name,
+      values: values,
+    });
   }
 
+  return data;
 };
+
+var classFromName = function (name) {
+  return name.toLowerCase().replace(/[^a-z]/ig, '');
+};
+
+var formatTime = function (d) {
+  var timeParts = [];
+  if(d >= 3600) {
+    var hours =  Math.floor(d / 3600);
+    timeParts.push(hours);
+    d -= hours * 3600;
+  }
+
+  var minutes = Math.floor(d / 60);
+  if(minutes === 60) {
+    timeParts.push('00');
+  } else if(timeParts.length > 0) {
+    minutes = '0' + minutes;
+    timeParts.push(minutes.substring(minutes.length - 2));
+  } else {
+    timeParts.push(minutes);
+  }
+  d -= minutes * 60;
+
+  var seconds = '0' + d;
+  timeParts.push(seconds.substring(seconds.length - 2));
+  
+  return timeParts.join(':');
+};
+
