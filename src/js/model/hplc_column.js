@@ -1,3 +1,7 @@
+'use strict';
+
+var f = require("./hplc_formulae.js").formulae;
+
 exports.Column = Column;
 
 function Column(presetName) {
@@ -78,36 +82,11 @@ function Column(presetName) {
 };
 
 Column.prototype.update = function () {
-  this.area = area(this);
-  this.volume = volume(this);
-  this.totalPorosity = totalPorosity(this);
-  this.voidVolume = voidVolume(this);
+  this.area = f.area(this);
+  this.volume = f.volume(this);
+  this.totalPorosity = f.totalPorosity(this);
+  this.voidVolume = f.voidVolume(this);
 };
-
-/* units: mm */
-var radius = function (column) {
-  return column.diameter / 2;
-};
-
-/* units: mm^2 */
-var area = function (column) {
-  return Math.PI * Math.pow(radius(column), 2);
-};
-
-var totalPorosity = function (column) {
-  return column.interparticlePorosity + column.intraparticlePorosity * (1 - column.interparticlePorosity);
-};
-
-/* units: mL */
-var voidVolume = function (column) {
-  return column.volume * column.totalPorosity / 1000;
-};
-
-/* units: mm^3 */
-var volume = function (column) {
-  return column.area * column.length;
-};
-
 
 var presets = {
   'Agilent Zorbax SB-C18': {

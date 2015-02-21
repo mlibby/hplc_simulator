@@ -4,6 +4,11 @@ var HPLC = require("./hplc_globals.js").globals;
 
 var f = exports.formulae = {};
 
+/* units: mm^2 */
+f.area = function (column) {
+  return Math.PI * Math.pow(f.radius(column), 2);
+};
+
 f.associationParameter = function (solventFraction) {
   // return ((1 - simulator.solventFraction) * (2.6 - 1.9)) + 1.9;
   return ((1 - solventFraction) * 0.7) + 1.9;
@@ -137,6 +142,11 @@ f.postTubingVolume = function (postTubingLength, postTubingDiameter) {
   return length * (area * 1e9);
 };
 
+/* units: mm */
+f.radius = function (column) {
+  return column.diameter / 2;
+};
+
 f.reducedFlowVelocity = function (particleSize, interstitialFlowVelocity, diffusionCoefficient) {
   return ((particleSize / 10000) * interstitialFlowVelocity) / diffusionCoefficient;
 };
@@ -159,9 +169,8 @@ f.solventMolecularWeight= function (solventFraction, solventMolecularWeight) {
   return (solventFraction * (solventMolecularWeight - 18)) + 18;
 };
 
-/* units: seconds */
-f.tR = function (voidTime, kPrime) {
-  return voidTime * (1 + kPrime);
+f.totalPorosity = function (column) {
+  return column.interparticlePorosity + column.intraparticlePorosity * (1 - column.interparticlePorosity);
 };
 
 f.theoreticalPlates = function (length, hetp) {
@@ -169,8 +178,23 @@ f.theoreticalPlates = function (length, hetp) {
 };
 
 /* units: seconds */
+f.tR = function (voidTime, kPrime) {
+  return voidTime * (1 + kPrime);
+}
+
+/* units: seconds */
 f.voidTime = function (voidVolume, flowRate) {
   return voidVolume / flowRate * 60;
+};
+
+/* units: mL */
+f.voidVolume = function (column) {
+  return column.volume * column.totalPorosity / 1000;
+};
+
+/* units: mm^3 */
+f.volume = function (column) {
+  return column.area * column.length;
 };
 
 /* units: moles */

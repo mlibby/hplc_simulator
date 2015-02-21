@@ -15,7 +15,10 @@ Chromatogram.prototype.highlight = function (compoundName, highlight) {
   selector = a css selector for the chart 'container'
 */
 Chromatogram.prototype.draw = function (simulator, selector) {
-  var data = buildData(simulator);
+  var data = buildCompoundData(simulator);
+  var analyteData = sumData(data).map(function (e, i) {
+    return {x: i, y: e, y0: 0}
+  })
 
   var chartContainer = d3.select(selector);
   if(chartContainer[0] == null) {
@@ -124,62 +127,69 @@ Chromatogram.prototype.draw = function (simulator, selector) {
     .y0(function (d) { return y(d.y0); })
     .y1(function (d) { return y(d.y0 + d.y); });
 
+  var line = d3.svg.line()
+    .x(function(d) { return x(d.x); })
+    .y(function(d) { return y(d.y); });
+
   svg.selectAll('.layer')
     .data(layers)
     .enter().append('path')
     .attr('class', 'layer')
+    .attr('transform', 'translate(' + margin.left + ',0)')
     .attr('d', function (d) { return area(d.values); })
     .style('fill', function (d, i) { return colors(i); });
+
+  svg.append('path')
+    .datum(analyteData)
+    .attr('class', 'line analyte')
+    .attr('transform', 'translate(' + margin.left + ',0)')
+    .attr('d', line);
 };
 
-var allCompoundSeries = function (dataSet) {
-  var series = [];
-  for(var p in dataSet) {
-    var ds = dataSet[p];
-    if(ds.type !== 'compound') {
+var sumData = function (data) {
+  var sums = [];
+  var seriesCount = data.length;
+  for(var i = 0; i < seriesCount; i++) {
+    var series = data[i];
+    if(series.type !== 'compound') {
       break;
     }
-
-    for(var v in ds.values) {
-      while(series.length <= v) {
-        series.push(0);
+    var valueCount = series.values.length;
+    for(var j = 0; j < valueCount; j++) {
+      if(sums[j] == null) {
+	sums[j] = 0
       }
-      series[v] += ds.values[v].y;
+      sums[j] += series.values[j].y;
     }
   }
-  return series;
+  return sums;
 };
 
-var buildData = function (simulator) {
+var buildCompoundData = function (simulator) {
   var data = [];
-  for(var i = 0; i < simulator.compounds.length; i++) {
+  var compoundCount = simulator.compounds.length
+  for(var i = 0; i < compoundCount; i++) {
     var compound = simulator.compounds[i];
     var values = simulator.getCompoundSeries(compound)
-        .map(function (e, i) {
-          return {x: i, y: e, y0: 0};
-        });
+      .map(function (e, i) {
+	return {x: i, y: e, y0: 0};
+      });
     data.push({
       type: 'compound',
       label: compound.name,
       values: values,
     });
   }
-
   return data;
-};
-
-var classFromName = function (name) {
-  return name.toLowerCase().replace(/[^a-z]/ig, '');
 };
 
 var formatTime = function (d) {
   var timeParts = [];
   if(d >= 3600) {
-    var hours =  Math.floor(d / 3600);
+    var hours = Math.floor(d / 3600);
     timeParts.push(hours);
     d -= hours * 3600;
   }
-
   var minutes = Math.floor(d / 60);
   if(minutes === 60) {
     timeParts.push('00');
@@ -190,10 +200,7 @@ var formatTime = function (d) {
     timeParts.push(minutes);
   }
   d -= minutes * 60;
-
   var seconds = '0' + d;
   timeParts.push(seconds.substring(seconds.length - 2));
-  
   return timeParts.join(':');
 };
-

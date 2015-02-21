@@ -101,6 +101,12 @@ table th {
   margin: 8px;
 }
 
+.chromatogram .line {
+  fill: none;
+  stroke-width: 1px;
+  stroke: #606060;
+}
+
 .ng-animate-show {
 //height: auto;
   opacity: 1;
