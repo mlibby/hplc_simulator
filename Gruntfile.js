@@ -146,7 +146,7 @@ module.exports = function(grunt) {
     uglify: {
       options: {
         mangle: false,
-        compress: true,
+        compress: {},
         beautify: false
       },
       js: {
