@@ -5,7 +5,7 @@ mkdir dist/css
 mkdir dist/html
 
 echo "grunting"
-node node_modules/grunt-cli/bin/grunt build --verbose
+node node_modules/grunt-cli/bin/grunt build-prod --verbose
 
 foreman start
 
