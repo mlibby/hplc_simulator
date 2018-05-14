@@ -1,4 +1,8 @@
 #!/bin/sh
+
+echo "npming"
+npm update
+
 echo "bowering"
 bower update
 
