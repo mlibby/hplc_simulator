@@ -21,7 +21,7 @@
     "tests"
   ],
   "dependencies": {
-    "angular-route": "~1.x.x",
+    "angular-route": "~1.3.x",
     "angular-material": "~0.8.x",
     "angular-mocks": "~1.x.x",
     "jquery": "~2.x.x",
