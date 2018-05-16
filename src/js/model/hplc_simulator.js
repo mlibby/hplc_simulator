@@ -60,6 +60,18 @@ function Simulator (updateObserver) {
     column: new Column('Agilent Zorbax SB-C18'),
   };
 
+  // override column update with full HPLC parameter update and redraw
+  inputs.column.update = (function(_this){
+    return function(){
+      this.area = f.area(this);
+      this.volume = f.volume(this);
+      this.totalPorosity = f.totalPorosity(this);
+      this.voidVolume = f.voidVolume(this);
+      _this.update();
+    }
+  })(this);
+
+
   /* create this.inputName properties to force           */
   /* recalculation of all outputs when an inputs changes */
   var inputNames = Object.getOwnPropertyNames(inputs);
@@ -185,3 +197,6 @@ Simulator.prototype.getCompoundSignal = function _getCompoundSignal (time, compo
   var signal = ((w / (piRoot * sigma * flowRate)) * Math.exp(timeFactor / sigmaFactor)) + this.signalOffset;
   return signal;
 };
+
+
+
